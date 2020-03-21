@@ -4,6 +4,7 @@ import ThemeSettings from "./ThemeSettings";
 import ComponentSettings from "./ComponentSettings";
 import ColumnSettings from "./ColumnSettings";
 import RowSettings from "./RowSettings";
+import mq from "../utils/mediaQueries";
 
 const Drawer = ({ depth, maxDepth, open, children }) => {
   const previous = useRef(0);
@@ -41,38 +42,44 @@ const Sidebar = ({ data, state, setState }) => {
   const maxDepth = state.component ? 2 : state.column ? 1 : 0;
   return (
     <div
-      css={{
-        position: "relative",
+      css={mq({
+        position: ["absolute", "absolute", "relative"],
+        top: ["56px", "56px", 0],
+        right: state.open ? ["0%", "0%", "0%"] : ["-100%", "-100%", "0%"],
+        transition: "right 250ms ease-out",
         width: "270px",
+        background: "#fff",
         height: "calc(100vh - 56px)",
         borderLeft: "1px solid rgba(0,0,0,0.14)",
+        boxShadow: [
+          "0 2px 4px rgba(0,0,0,.5)",
+          "0 2px 4px rgba(0,0,0,.5)",
+          "none"
+        ],
+        zIndex: [1, 1, "auto"],
         flexShrink: 0,
         flexGrow: 0
-      }}
+      })}
     >
       <ThemeSettings
-        onClick={() =>
-          setState({ row: null, column: null, component: null })
-        }
+        onClick={() => setState({ row: null, column: null, component: null })}
       />
       <Drawer depth={1} maxDepth={maxDepth} open={!!state.row}>
         <RowSettings
           row={data.rowMap[state.row]}
-          onClick={() => setState(state => ({ ...state, column: null, component: null }))}
+          onClick={() =>
+            setState(state => ({ ...state, column: null, component: null }))
+          }
         />
       </Drawer>
       <Drawer depth={2} maxDepth={maxDepth} open={!!state.column}>
         <ColumnSettings
           column={data.columnMap[state.column]}
-          onClick={() =>
-            setState(state => ({ ...state, component: null }))
-          }
+          onClick={() => setState(state => ({ ...state, component: null }))}
         />
       </Drawer>
       <Drawer depth={3} maxDepth={maxDepth} open={!!state.component}>
-        <ComponentSettings
-          component={data.componentMap[state.component]}
-        />
+        <ComponentSettings component={data.componentMap[state.component]} />
       </Drawer>
     </div>
   );

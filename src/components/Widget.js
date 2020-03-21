@@ -71,6 +71,7 @@ const Widget = ({
                   css={{ fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
                   onClick={() =>
                     setDrawerState({
+                      open: true,
                       row: rowID,
                       column: columnID,
                       component: widget.id
@@ -84,6 +85,7 @@ const Widget = ({
                 <HeaderControl
                   onClick={() =>
                     setDrawerState({
+                      open: true,
                       row: rowID,
                       column: columnID,
                       component: widget.id

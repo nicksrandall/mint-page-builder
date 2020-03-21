@@ -88,6 +88,7 @@ const Column = ({ rowID, column, index, drawerState, setDrawerState }) => {
                       }}
                       onClick={() =>
                         setDrawerState({
+                          open: true,
                           row: rowID,
                           column: column.id,
                           component: null
@@ -124,6 +125,7 @@ const Column = ({ rowID, column, index, drawerState, setDrawerState }) => {
                     <HeaderControl
                       onClick={() =>
                         setDrawerState({
+                          open: true,
                           row: rowID,
                           column: column.id,
                           component: null

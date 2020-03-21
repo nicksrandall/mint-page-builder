@@ -59,6 +59,7 @@ const Row = ({ row, index, drawerState, setDrawerState }) => {
                   <RowButton
                     onClick={() =>
                       setDrawerState({
+                        open: true,
                         row: row.id,
                         column: null,
                         component: null

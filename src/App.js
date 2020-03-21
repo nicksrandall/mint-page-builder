@@ -13,6 +13,7 @@ import Row from "./components/Row";
 import Preview from "./components/Preview";
 import DragContext from "./contexts/DragContext";
 import Icon from "./components/Icon";
+import mq from "./utils/mediaQueries";
 
 const HeaderButton = styled.button`
   background: ${({ active }) => (active ? "#fff" : "#a9ebe2")};
@@ -26,6 +27,7 @@ const App = () => {
   const [preview, setPreview] = useState(false);
   const [state, dispatch] = useDragState();
   const [drawerState, setDrawerState] = useState({
+    open: false,
     row: null,
     column: null,
     component: null
@@ -79,13 +81,28 @@ const App = () => {
             }}
           >
             <div css={{ fontSize: "24px" }}>Mint</div>
-            <div>
+            <div css={{ display: "flex", alignItems: "center" }}>
               <HeaderButton active={!preview} onClick={() => setPreview(false)}>
                 Settings
               </HeaderButton>
               <HeaderButton active={preview} onClick={() => setPreview(true)}>
                 Preview
               </HeaderButton>
+              <button
+                css={mq({
+                  display: ['block', 'block', 'none'],
+                  color: '#fff',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  padding: '12px',
+                })}
+                onClick={() =>
+                  setDrawerState(state => ({ ...state, open: !state.open }))
+                }
+              >
+                <Icon icon="menu" />
+              </button>
             </div>
           </div>
           {preview ? (
@@ -124,7 +141,7 @@ const App = () => {
                     <button
                       onClick={() => dispatch({ type: ADD_ROW })}
                       css={{
-                        width: '100%',
+                        width: "100%",
                         border: "1px dashed rgba(0,0,0,0)",
                         padding: "24px",
                         background: "transparent",
@@ -134,7 +151,11 @@ const App = () => {
                         }
                       }}
                     >
-                      <Icon icon="add_circle_outline" fontSize="24px" label="Add Row" />
+                      <Icon
+                        icon="add_circle_outline"
+                        fontSize="24px"
+                        label="Add Row"
+                      />
                     </button>
                   </div>
                 </div>
