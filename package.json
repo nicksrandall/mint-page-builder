@@ -2,6 +2,7 @@
   "name": "mint-page-builder",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://gsd212ny.github.io/mint-page-builder",
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
@@ -17,6 +18,7 @@
     "draft-js": "^0.11.4",
     "draftjs-to-html": "^0.9.1",
     "escape-html": "^1.0.3",
+    "gh-pages": "^2.2.0",
     "html-to-draftjs": "^1.5.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.6",
@@ -33,6 +35,8 @@
     "slate-react": "^0.57.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
@@ -42,11 +46,7 @@
     "extends": "react-app"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
