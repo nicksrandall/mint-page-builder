@@ -44,9 +44,10 @@ const Sidebar = ({ data, state, setState }) => {
     <div
       css={mq({
         position: ["absolute", "absolute", "relative"],
-        top: ["56px", "56px", 0],
-        right: state.open ? ["0%", "0%", "0%"] : ["-100%", "-100%", "0%"],
-        transition: "right 250ms ease-out",
+        top: 0,
+        right: 0,
+        transform: state.open ? ["translate3d(0%, 0%, 0)", "translate3d(0%, 0%, 0)", "translate3d(0%, 0%, 0)"] : ["translate3d(100%, 0%, 0)", "translate3d(100%, 0%, 0)", "translate3d(0%, 0%, 0)"],
+        transition: "transform 250ms ease-out",
         width: "270px",
         background: "#fff",
         height: "calc(100vh - 56px)",

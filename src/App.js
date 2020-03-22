@@ -64,7 +64,7 @@ const App = () => {
     <DragContext.Provider value={{ state, dispatch }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <div
-          css={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          css={{ display: "flex", flexDirection: "column", height: "100vh", width: '100%', overflowX: 'hidden' }}
         >
           {/* app bar */}
           <div
@@ -108,7 +108,7 @@ const App = () => {
           {preview ? (
             <Preview state={state} />
           ) : (
-            <div css={{ display: "flex", height: "100%", overflow: "hidden" }}>
+            <div css={{ display: "flex", height: "100%", overflow: "hidden", position: 'relative' }}>
               {/* content area */}
               <div
                 css={{

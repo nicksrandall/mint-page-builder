@@ -118,7 +118,7 @@ const Row = ({ row, index, drawerState, setDrawerState }) => {
                     ) : (
                       <div
                         css={{
-                          width: "100%",
+                          width: "266px",
                           textAlign: "center",
                           padding: "24px",
                           color: "#999",
