@@ -78,8 +78,10 @@ const Preview = ({ state }) => {
         >
           <div
             css={{
+              width: '100%',
               border: "1px solid #000",
-              padding: "16px"
+              padding: "16px",
+              overflow: 'auto',
             }}
           >
             <code css={{ padding: "12px" }}>

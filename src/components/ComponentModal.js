@@ -7,10 +7,11 @@ import "@reach/dialog/styles.css";
 
 import Icon from "./Icon";
 import registry from "../utils/componentRegistery";
+import mq from "../utils/mediaQueries";
 
 const Tile = ({ icon, name, onClick }) => {
   return (
-    <div css={{ padding: "12px", width: "25%" }}>
+    <div css={mq({ padding: "12px", width: ["50%", "33.333%", "25%"] })}>
       <button
         css={{
           cursor: "pointer",
@@ -19,7 +20,7 @@ const Tile = ({ icon, name, onClick }) => {
           border: "1px solid rgba(0,0,0,0.14)",
           background: "#fff",
           "&:hover": {
-            background: "#66beb2",
+            background: "#66beb2"
           }
         }}
         onClick={onClick}
@@ -59,7 +60,7 @@ const Modal = ({ isOpen, close, onSelectComponent }) => {
         <span aria-hidden>×</span>
       </button>
       <h2>Select a component to insert</h2>
-      <div css={{ display: "flex", flexWrap: "wrap", margin: '0 -12px' }}>
+      <div css={{ display: "flex", flexWrap: "wrap", margin: "0 -12px" }}>
         {registry.getComponents().map(component => {
           return (
             <Tile
