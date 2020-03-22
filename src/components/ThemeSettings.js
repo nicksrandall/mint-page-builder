@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import DragContext from "../contexts/DragContext";
 import { SectionHeading } from "./DrawerUtils";
 import { PropView } from "./Prop";
 import { UPDATE_THEME } from "../hooks/useDragState";
+import {useDragState} from "../contexts/DragContext";
 
 const templateSpec = {
   name: "Template",
@@ -29,7 +29,7 @@ const templateSpec = {
 };
 
 const Prop = props => {
-  const { state } = useContext(DragContext);
+  const state = useDragState();
   const value = state.template.props[props.definition.name];
   return <PropView action={UPDATE_THEME} value={value} {...props} />;
 };

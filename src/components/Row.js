@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 
 import Icon from "./Icon";
 import { CLONE_ROW, ADD_COLUMN, DELETE_ROW } from "../hooks/useDragState";
-import DragContext from "../contexts/DragContext";
 import Column from "./Column";
+import {useDragState, useDragUpdater} from "../contexts/DragContext";
+import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";
 
 const RowButton = styled.button`
   color: inherit;
@@ -16,8 +17,11 @@ const RowButton = styled.button`
   border: none;
 `;
 
-const Row = ({ row, index, drawerState, setDrawerState }) => {
-  const { state, dispatch } = useContext(DragContext);
+const Row = React.memo(({ row, index }) => {
+  const state = useDragState();
+  const dispatch = useDragUpdater();
+  const setDrawerState = useDrawerUpdater();
+  const drawerState = useDrawerState();
   return (
     <Draggable draggableId={row.id} index={index}>
       {(provided, snapshot) => (
@@ -106,8 +110,6 @@ const Row = ({ row, index, drawerState, setDrawerState }) => {
                               rowID={row.id}
                               columnCount={row.columns.length}
                               column={state.columnMap[id]}
-                              drawerState={drawerState}
-                              setDrawerState={setDrawerState}
                               index={idx}
                               key={id}
                             />
@@ -168,6 +170,6 @@ const Row = ({ row, index, drawerState, setDrawerState }) => {
       )}
     </Draggable>
   );
-};
+});
 
 export default Row;

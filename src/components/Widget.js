@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
-import DragContext from "../contexts/DragContext";
 import styled from "@emotion/styled";
 import { DELETE_WIDGET, CLONE_WIDGET } from "../hooks/useDragState";
 import Icon from "./Icon";
+import {useDragUpdater} from "../contexts/DragContext";
+import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";
 
 const HeaderControl = styled.button({
   color: "inherit",
@@ -17,15 +18,15 @@ const HeaderControl = styled.button({
   margin: 0
 });
 
-const Widget = ({
+const Widget = React.memo(({
   rowID,
   columnID,
   widget,
   index,
-  drawerState,
-  setDrawerState
 }) => {
-  const { dispatch } = useContext(DragContext);
+  const dispatch = useDragUpdater();
+  const setDrawerState = useDrawerUpdater();
+  const drawerState = useDrawerState();
   return (
     <Draggable draggableId={widget.id} index={index}>
       {(provided, snapshot) => (
@@ -155,6 +156,6 @@ const Widget = ({
       )}
     </Draggable>
   );
-};
+});
 
 export default Widget;

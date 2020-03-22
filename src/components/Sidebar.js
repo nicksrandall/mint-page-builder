@@ -6,6 +6,9 @@ import ColumnSettings from "./ColumnSettings";
 import RowSettings from "./RowSettings";
 import mq from "../utils/mediaQueries";
 
+import { useDrawerUpdater, useDrawerState } from "../contexts/DrawerContext";
+import { useDragState } from "../contexts/DragContext";
+
 const Drawer = ({ depth, maxDepth, open, children }) => {
   const previous = useRef(0);
   useEffect(() => {
@@ -38,7 +41,10 @@ const Drawer = ({ depth, maxDepth, open, children }) => {
   );
 };
 
-const Sidebar = ({ data, state, setState }) => {
+const Sidebar = () => {
+  const data = useDragState();
+  const state = useDrawerState();
+  const setState = useDrawerUpdater();
   const maxDepth = state.component ? 2 : state.column ? 1 : 0;
   return (
     <div
@@ -46,7 +52,17 @@ const Sidebar = ({ data, state, setState }) => {
         position: ["absolute", "absolute", "relative"],
         top: 0,
         right: 0,
-        transform: state.open ? ["translate3d(0%, 0%, 0)", "translate3d(0%, 0%, 0)", "translate3d(0%, 0%, 0)"] : ["translate3d(100%, 0%, 0)", "translate3d(100%, 0%, 0)", "translate3d(0%, 0%, 0)"],
+        transform: state.open
+          ? [
+              "translate3d(0%, 0%, 0)",
+              "translate3d(0%, 0%, 0)",
+              "translate3d(0%, 0%, 0)"
+            ]
+          : [
+              "translate3d(100%, 0%, 0)",
+              "translate3d(100%, 0%, 0)",
+              "translate3d(0%, 0%, 0)"
+            ],
         transition: "transform 250ms ease-out",
         width: "270px",
         background: "#fff",

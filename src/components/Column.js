@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import uuid from "@lukeed/uuid";
@@ -7,7 +7,8 @@ import ComponentModal from "./ComponentModal";
 import Icon from "./Icon";
 import { ADD_WIDGET, DELETE_COLUMN, CLONE_COLUMN } from "../hooks/useDragState";
 import Widget from "./Widget";
-import DragContext from "../contexts/DragContext";
+import {useDragState, useDragUpdater} from "../contexts/DragContext";
+import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";
 
 const Sizing = styled.span`
   display: inline-flex;
@@ -25,8 +26,11 @@ const HeaderControl = styled.button({
   margin: 0
 });
 
-const Column = ({ rowID, column, index, drawerState, setDrawerState }) => {
-  const { state, dispatch } = useContext(DragContext);
+const Column = React.memo(({ rowID, column, index }) => {
+  const state = useDragState();
+  const dispatch = useDragUpdater();
+  const setDrawerState = useDrawerUpdater();
+  const drawerState = useDrawerState();
   const [showDialog, setShowDialog] = useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
@@ -194,8 +198,6 @@ const Column = ({ rowID, column, index, drawerState, setDrawerState }) => {
                             index={index}
                             rowID={rowID}
                             columnID={column.id}
-                            drawerState={drawerState}
-                            setDrawerState={setDrawerState}
                           />
                         ))}
                         {dropProvided.placeholder}
@@ -247,6 +249,6 @@ const Column = ({ rowID, column, index, drawerState, setDrawerState }) => {
       )}
     </Draggable>
   );
-};
+});
 
 export default Column;

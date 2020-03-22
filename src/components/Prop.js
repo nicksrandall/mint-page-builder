@@ -1,12 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
+import debounceFn from "debounce-fn";
 
-import DragContext from "../contexts/DragContext";
+import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { UPDATE_PROP } from "../hooks/useDragState";
 // import WYSIWYG from './Slate';
 import WYSIWYG from "./Wysiwyg";
+
+const debounce = (callback, options) => {
+  const debounced = debounceFn(callback, options);
+  return (e) => {
+    e.persist();
+    return debounced(e);
+  };
+}
 
 const Label = styled.label`
   font-size: 14px;
@@ -43,58 +52,64 @@ const Number = ({ placeholder }) => {
     <div
       css={{
         padding: "8px",
-        width: "100%",
+        width: "100%"
       }}
     >
-      <Input css={{textAlign: 'center'}} type="number" placeholder={placeholder} />
+      <Input
+        css={{ textAlign: "center" }}
+        type="number"
+        placeholder={placeholder}
+      />
     </div>
   );
 };
 
-const WYSIWYGButton = ({ action, value, definition, uuid, mapKey }) => {
-  const { dispatch } = useContext(DragContext);
-  const [showDialog, setShowDialog] = useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-  return (
-    <PropContainer>
-      <Label>{definition.displayName}</Label>
-      <Button onClick={open}>Edit Content</Button>
+const WYSIWYGButton = React.memo(
+  ({ action, value, definition, uuid, mapKey }) => {
+    const dispatch = useDragUpdater();
+    const [showDialog, setShowDialog] = useState(false);
+    const open = () => setShowDialog(true);
+    const close = () => setShowDialog(false);
+    return (
+      <PropContainer>
+        <Label>{definition.displayName}</Label>
+        <Button onClick={open}>Edit Content</Button>
 
-      <Dialog
-        css={{
-          width: "90%",
-          padding: "0",
-          background: "#fff"
-        }}
-        isOpen={showDialog}
-        onDismiss={close}
-        aria-label="Add component"
-      >
-        <WYSIWYG
-          html={value}
-          handleClose={close}
-          handleSave={value => {
-            dispatch({
-              type: action,
-              payload: {
-                id: uuid,
-                mapKey: mapKey,
-                name: definition.name,
-                value: value
-              }
-            });
-            close();
+        <Dialog
+          css={{
+            width: "90%",
+            padding: "0",
+            background: "#fff"
           }}
-        />
-      </Dialog>
-    </PropContainer>
-  );
-};
+          isOpen={showDialog}
+          onDismiss={close}
+          aria-label="Add component"
+        >
+          <WYSIWYG
+            html={value}
+            handleClose={close}
+            handleSave={value => {
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: value
+                }
+              });
+              close();
+            }}
+          />
+        </Dialog>
+      </PropContainer>
+    );
+  }
+);
 
-export const PropView = props => {
+export const PropView = React.memo(props => {
   const { action, value, definition, uuid, mapKey } = props;
-  const { dispatch } = useContext(DragContext);
+  const dispatch = useDragUpdater();
   switch (definition.type) {
     case "text":
       return (
@@ -102,19 +117,45 @@ export const PropView = props => {
           <Label>{definition.displayName}</Label>
           <Input
             type="text"
-            value={value}
+            defaultValue={value}
             placeholder={definition.placeholder}
-            onChange={e =>
-              dispatch({
-                type: action,
-                payload: {
-                  id: uuid,
-                  mapKey: mapKey,
-                  name: definition.name,
-                  value: e.target.value
-                }
-              })
-            }
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                }),
+              { wait: 100 }
+            )}
+          />
+        </PropContainer>
+      );
+    case "url":
+      return (
+        <PropContainer>
+          <Label>{definition.displayName}</Label>
+          <Input
+            type="url"
+            defaultValue={value}
+            placeholder={definition.placeholder}
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                }),
+              { wait: 100 }
+            )}
           />
         </PropContainer>
       );
@@ -124,18 +165,20 @@ export const PropView = props => {
           <Label>{definition.displayName}</Label>
           <input
             type="color"
-            value={value}
-            onChange={e =>
-              dispatch({
-                type: action,
-                payload: {
-                  id: uuid,
-                  mapKey: mapKey,
-                  name: definition.name,
-                  value: e.target.value
-                }
-              })
-            }
+            defaultValue={value}
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                }),
+              { wait: 100 }
+            )}
           />
         </PropContainer>
       );
@@ -145,16 +188,17 @@ export const PropView = props => {
           <Label>{definition.displayName}</Label>
           <Select
             value={value}
-            onChange={e =>
-              dispatch({
-                type: action,
-                payload: {
-                  id: uuid,
-                  mapKey: mapKey,
-                  name: definition.name,
-                  value: e.target.value
-                }
-              })
+            onChange={
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                })
             }
           >
             {definition.values.map(option => {
@@ -220,21 +264,23 @@ export const PropView = props => {
           <Label>{definition.displayName}</Label>
           <Input
             type="range"
-            value={value}
+            defaultValue={value}
             min={definition.min}
             max={definition.max}
             step={definition.step}
-            onChange={e =>
-              dispatch({
-                type: action,
-                payload: {
-                  id: uuid,
-                  mapKey: mapKey,
-                  name: definition.name,
-                  value: e.target.value
-                }
-              })
-            }
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                }),
+              { wait: 100 }
+            )}
           />
         </PropContainer>
       );
@@ -261,18 +307,20 @@ export const PropView = props => {
           <Label>{definition.displayName}</Label>
           <input
             type="checkbox"
-            checked={value}
-            onChange={e =>
-              dispatch({
-                type: action,
-                payload: {
-                  id: uuid,
-                  mapKey: mapKey,
-                  name: definition.name,
-                  value: e.target.checked
-                }
-              })
-            }
+            defaultChecked={value}
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.checked
+                  }
+                }),
+              { wait: 100 }
+            )}
           />
           <span>{definition.label}</span>
         </PropContainer>
@@ -284,10 +332,10 @@ export const PropView = props => {
         <p>Field of type {definition.type} has not been implemented yet.</p>
       );
   }
-};
+});
 
 const Prop = props => {
-  const { state } = useContext(DragContext);
+  const state = useDragState();
   const value = state[props.mapKey][props.uuid].props[props.definition.name];
   return <PropView action={UPDATE_PROP} value={value} {...props} />;
 };

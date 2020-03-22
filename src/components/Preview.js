@@ -3,10 +3,13 @@ import styled from "@emotion/styled";
 
 import Icon from "./Icon";
 
+import KitPreview from './KitPreview';
+import {useDragState} from '../contexts/DragContext'
+
 const Control = styled.button`
   background: ${({ active }) => (active ? "#66beb2" : "#fff")};
   color: ${({ active }) => (active ? "#fff" : "#000")};
-  border: 1px solid rgba(0,0,0,0.14);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   outline: none;
   padding: 8px 12px;
   cursor: pointer;
@@ -15,7 +18,8 @@ const Control = styled.button`
   }
 `;
 
-const Preview = ({ state }) => {
+const Preview = () => {
+  const state = useDragState();
   const tree = useMemo(() => {
     const layout = state.ordered.map(id => {
       const row = state.rowMap[id];
@@ -66,6 +70,9 @@ const Preview = ({ state }) => {
         <Control active={width === 600} onClick={() => setWidth(600)}>
           <Icon icon="phone_iphone" />
         </Control>
+        <Control active={width === 601} onClick={() => setWidth(601)}>
+          <Icon icon="code" />
+        </Control>
       </div>
       <div css={{ overflow: "auto", width: "100%" }}>
         <div
@@ -73,21 +80,25 @@ const Preview = ({ state }) => {
             margin: "auto",
             padding: "0 16px 32px",
             transition: "width 200ms ease-in",
+            border: "1px solid #000",
             width: `${width}px`
           }}
         >
-          <div
-            css={{
-              width: '100%',
-              border: "1px solid #000",
-              padding: "16px",
-              overflow: 'auto',
-            }}
-          >
-            <code css={{ padding: "12px" }}>
-              <pre>{JSON.stringify(tree, null, "  ")}</pre>
-            </code>
-          </div>
+          {width === 601 ? (
+            <div
+              css={{
+                width: "100%",
+                padding: "16px",
+                overflow: "auto"
+              }}
+            >
+              <code css={{ padding: "12px" }}>
+                <pre>{JSON.stringify(tree, null, "  ")}</pre>
+              </code>
+            </div>
+          ) : (
+            <KitPreview layout={tree.layout} />
+          )}
         </div>
       </div>
     </div>
