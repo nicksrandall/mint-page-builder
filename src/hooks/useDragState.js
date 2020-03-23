@@ -84,7 +84,8 @@ const makeData = () => {
         props: {
           mobileSpan: 4,
           tabletSpan: 8,
-          desktopSpan: 2
+          desktopSpan: 2,
+          padding: {px: 12, py: 12}
         }
       },
       [col2]: {
@@ -93,7 +94,8 @@ const makeData = () => {
         props: {
           mobileSpan: 4,
           tabletSpan: 8,
-          desktopSpan: 2
+          desktopSpan: 2,
+          padding: {px: 12, py: 12}
         }
       },
       [col3]: {
@@ -102,7 +104,8 @@ const makeData = () => {
         props: {
           mobileSpan: 4,
           tabletSpan: 8,
-          desktopSpan: 12
+          desktopSpan: 12,
+          padding: {px: 12, py: 12}
         }
       }
     },
@@ -159,7 +162,8 @@ const reducer = produce((state, action) => {
           props: {
             mobileSpan: 4,
             tabletSpan: 8,
-            desktopSpan: 12
+            desktopSpan: 12,
+            padding: {px: 12, py: 12}
           }
         };
         return;
@@ -283,7 +287,8 @@ const reducer = produce((state, action) => {
           props: {
             mobileSpan: 4,
             tabletSpan: 8,
-            desktopSpan: 12
+            desktopSpan: 12,
+            padding: {px: 12, py: 12}
           }
         };
         state.rowMap[payload.id].columns.push(id);

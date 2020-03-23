@@ -55,6 +55,12 @@ registry.register({
       ]
     },
     {
+      name: "typography",
+      displayName: "Typography",
+      type: "typography",
+      defaultValue: { px: 12, py: 12 },
+    },
+    {
       name: "content",
       displayName: "Content",
       defaultValue: "",

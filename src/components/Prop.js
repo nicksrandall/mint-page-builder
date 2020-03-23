@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import styled from "@emotion/styled";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 import debounceFn from "debounce-fn";
+import Popover, { positionDefault } from "@reach/popover";
+import { SketchPicker } from "react-color";
+import { Sx } from "@theme-ui/editor";
+import { useThemeUI } from "theme-ui";
 
 import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { UPDATE_PROP } from "../hooks/useDragState";
@@ -11,11 +15,11 @@ import WYSIWYG from "./Wysiwyg";
 
 const debounce = (callback, options) => {
   const debounced = debounceFn(callback, options);
-  return (e) => {
+  return e => {
     e.persist();
     return debounced(e);
   };
-}
+};
 
 const Label = styled.label`
   font-size: 14px;
@@ -24,6 +28,7 @@ const Label = styled.label`
 `;
 
 const PropContainer = styled.div`
+  font-size: 12px;
   padding-bottom: 24px;
 `;
 
@@ -46,23 +51,6 @@ const Select = styled.select`
   display: block;
   padding: 8px;
 `;
-
-const Number = ({ placeholder }) => {
-  return (
-    <div
-      css={{
-        padding: "8px",
-        width: "100%"
-      }}
-    >
-      <Input
-        css={{ textAlign: "center" }}
-        type="number"
-        placeholder={placeholder}
-      />
-    </div>
-  );
-};
 
 const WYSIWYGButton = React.memo(
   ({ action, value, definition, uuid, mapKey }) => {
@@ -106,6 +94,79 @@ const WYSIWYGButton = React.memo(
     );
   }
 );
+
+const ColorPicker = ({ value = "#66beb2", onChange }) => {
+  const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <button
+        ref={ref}
+        onClick={() => setIsOpen(v => !v)}
+        css={{
+          border: "none",
+          padding: "5px",
+          background: "#fff",
+          borderRadius: "1px",
+          boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
+          display: "inline-block",
+          cursor: "pointer"
+        }}
+      >
+        <div
+          css={{
+            width: "36px",
+            height: "15px",
+            borderRadius: "2px",
+            background: value
+          }}
+        />
+      </button>
+      {isOpen ? (
+        <Popover targetRef={ref} position={positionDefault}>
+          <SketchPicker
+            color={value}
+            onChangeComplete={v => {
+              onChange(v.hex);
+              setIsOpen(false);
+            }}
+          />
+        </Popover>
+      ) : null}
+    </div>
+  );
+};
+
+const bmReducer = (state, next) => ({ ...state, ...next });
+const BoxModel = ({ value, onChange }) => {
+  const [style, setStyle] = useReducer(bmReducer, value);
+  useEffect(() => {
+    console.log("setting", style);
+    onChange(style);
+  }, [style, onChange]);
+  return (
+    <div css={{ fontSize: "12px" }}>
+      <Sx.Padding
+        value={style}
+        onChange={v => {
+          setStyle(v);
+        }}
+      />
+    </div>
+  );
+};
+
+const Typography = ({ value, onChange }) => {
+  const { theme } = useThemeUI();
+  console.log('theme', theme);
+  return (
+    <Sx.Typography
+      value={value}
+      theme={theme}
+      onChange={onChange}
+    />
+  );
+};
 
 export const PropView = React.memo(props => {
   const { action, value, definition, uuid, mapKey } = props;
@@ -163,22 +224,20 @@ export const PropView = React.memo(props => {
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
-          <input
+          <ColorPicker
             type="color"
-            defaultValue={value}
-            onChange={debounce(
-              e =>
-                dispatch({
-                  type: action,
-                  payload: {
-                    id: uuid,
-                    mapKey: mapKey,
-                    name: definition.name,
-                    value: e.target.value
-                  }
-                }),
-              { wait: 100 }
-            )}
+            value={value}
+            onChange={value =>
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: value
+                }
+              })
+            }
           />
         </PropContainer>
       );
@@ -188,17 +247,16 @@ export const PropView = React.memo(props => {
           <Label>{definition.displayName}</Label>
           <Select
             value={value}
-            onChange={
-              e =>
-                dispatch({
-                  type: action,
-                  payload: {
-                    id: uuid,
-                    mapKey: mapKey,
-                    name: definition.name,
-                    value: e.target.value
-                  }
-                })
+            onChange={e =>
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: e.target.value
+                }
+              })
             }
           >
             {definition.values.map(option => {
@@ -288,16 +346,20 @@ export const PropView = React.memo(props => {
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
-          <div css={{ width: "50%", margin: "0 auto" }}>
-            <Number placeholder="top" />
-          </div>
-          <div css={{ display: "flex" }}>
-            <Number placeholder="left" />
-            <Number placeholder="right" />
-          </div>
-          <div css={{ width: "50%", margin: "0 auto" }}>
-            <Number placeholder="bottom" />
-          </div>
+          <BoxModel
+            onChange={v => {
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: v
+                }
+              });
+            }}
+            value={value}
+          />
         </PropContainer>
       );
 
@@ -327,6 +389,18 @@ export const PropView = React.memo(props => {
       );
     case "WYSIWYG":
       return <WYSIWYGButton {...props} />;
+    case "typography":
+      return (
+        <PropContainer>
+          <Label>{definition.displayName}</Label>
+          <Typography
+            value={value}
+            onChange={value => {
+              console.log("value", value);
+            }}
+          />
+        </PropContainer>
+      );
     default:
       return (
         <p>Field of type {definition.type} has not been implemented yet.</p>

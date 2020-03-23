@@ -54,10 +54,7 @@ const columnSpec = {
     {
       name: "padding",
       displayName: "Padding",
-      type: "box-model",
-      min: 1,
-      max: 12,
-      step: 1
+      type: "box-model"
     }
   ]
 };
@@ -87,7 +84,7 @@ const ColumnSettings = ({ column, onClick }) => {
       <div css={{ width: "100%" }}>
         <div
           css={{
-            cursor: 'pointer',
+            cursor: "pointer",
             padding: "8px",
             display: "flex",
             alignItems: "center",

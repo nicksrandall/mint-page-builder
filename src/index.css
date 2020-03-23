@@ -23,3 +23,7 @@ code {
 button {
   cursor: pointer;
 }
+
+[data-reach-popover] {
+  z-index: 10;
+}
