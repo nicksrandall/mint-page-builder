@@ -1,7 +1,7 @@
 {
   "name": "mint-page-builder",
   "version": "0.1.0",
-  "homepage": "https://gsd212ny.github.io/mint-page-builder",
+  "homepage": "https://mint-page-builder.now.sh",
   "private": true,
   "dependencies": {
     "@contentful/forma-36-fcss": "^0.0.34",
