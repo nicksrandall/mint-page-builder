@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "theme-ui";
@@ -122,8 +122,15 @@ const MenuButton = () => {
   );
 };
 
-const App = () => {
+const onConfigure = sdk => {
+  console.log("on config sdk", sdk);
+};
+
+const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
+  useEffect(() => {
+    sdk.onConfigure(() => onConfigure(sdk));
+  }, [sdk]);
 
   return (
     <ThemeProvider theme={base}>
