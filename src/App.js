@@ -142,7 +142,7 @@ const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
   return (
     <ThemeProvider theme={base}>
-      <DragProvider sdk={sdk} initialValue={sdk.field.getValue()}>
+      <DragProvider sdk={sdk} initialValue={sdk?.field?.getValue()}>
         <DrawerProvider>
           <div
             css={{
