@@ -7,10 +7,7 @@ import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
 import { init } from 'contentful-ui-extensions-sdk';
 
-console.log('init', init);
-
 init(sdk => {
-  console.log('testing', sdk);
   ReactDOM.render(
     <React.StrictMode>
       <App sdk={sdk}/>
