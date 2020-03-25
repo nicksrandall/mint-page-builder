@@ -5,7 +5,7 @@ const DragStateContext = createContext();
 const DragUpdaterContext = createContext();
 
 const DragProvider = props => {
-  const [state, dispatch] = useDrag();
+  const [state, dispatch] = useDrag(props.initialValue);
   return (
     <DragStateContext.Provider value={state}>
       <DragUpdaterContext.Provider value={dispatch}>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "theme-ui";
@@ -122,23 +122,27 @@ const MenuButton = () => {
   );
 };
 
-const onConfigure = sdk => {
-  console.log("on config sdk", sdk);
+const SaveButton = ({ sdk }) => {
+  const state = useDragState();
+  return (
+    <button
+      css={{
+        padding: "12px 24px",
+        border: "none",
+        background: "transparent"
+      }}
+      onClick={() => sdk.field.setValue(state)}
+    >
+      Save
+    </button>
+  );
 };
 
 const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
-  useEffect(() => {
-    sdk.app.onConfigure(() => onConfigure(sdk));
-    sdk.app.getParameters().then(parameters => {
-      console.log('params', parameters);
-      sdk.app.setReady();
-    });
-  }, [sdk]);
-
   return (
     <ThemeProvider theme={base}>
-      <DragProvider>
+      <DragProvider sdk={sdk} initialValue={sdk.field.getValue()}>
         <DrawerProvider>
           <div
             css={{
@@ -165,6 +169,7 @@ const App = ({ sdk }) => {
             >
               <div css={{ fontSize: "24px" }}>Mint</div>
               <div css={{ display: "flex", alignItems: "center" }}>
+                <SaveButton sdk={sdk} />
                 <HeaderButton
                   active={!preview}
                   onClick={() => setPreview(false)}

@@ -35,7 +35,11 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const makeData = () => {
+const makeData = initialValue => {
+  if (initialValue) {
+    return initialValue;
+  }
+
   // rows
   const row1 = uuid();
   const row2 = uuid();
@@ -85,7 +89,7 @@ const makeData = () => {
           mobileSpan: 4,
           tabletSpan: 8,
           desktopSpan: 2,
-          padding: {px: 12, py: 12}
+          padding: { px: 12, py: 12 }
         }
       },
       [col2]: {
@@ -95,7 +99,7 @@ const makeData = () => {
           mobileSpan: 4,
           tabletSpan: 8,
           desktopSpan: 2,
-          padding: {px: 12, py: 12}
+          padding: { px: 12, py: 12 }
         }
       },
       [col3]: {
@@ -105,7 +109,7 @@ const makeData = () => {
           mobileSpan: 4,
           tabletSpan: 8,
           desktopSpan: 12,
-          padding: {px: 12, py: 12}
+          padding: { px: 12, py: 12 }
         }
       }
     },
@@ -142,203 +146,40 @@ const makeData = () => {
 };
 
 const reducer = produce((state, action) => {
-    switch (action.type) {
-      case ADD_ROW: {
-        const rowID = uuid();
-        const colID = uuid();
-        state.ordered.push(rowID);
-        state.rowMap[rowID] = {
-          id: rowID,
-          columns: [colID],
-          props: {
-            backgroundImage: "path/to/some/bg.png",
-            backgroundColor: "#0000ff",
-            fluid: false
-          }
-        };
-        state.columnMap[colID] = {
-          id: colID,
-          components: [],
-          props: {
-            mobileSpan: 4,
-            tabletSpan: 8,
-            desktopSpan: 12,
-            padding: {px: 12, py: 12}
-          }
-        };
-        return;
-      }
-      case CLONE_ROW: {
-        const payload = action.payload;
-        const rowID = uuid();
-        const clone = state.rowMap[payload.id];
-        state.ordered.splice(payload.index, 0, rowID);
-        const columns = clone.columns.map(colID => {
-          const newID = uuid();
-          const cloned = state.columnMap[colID];
-          const components = cloned.components.map(componentID => {
-            const cloned = state.componentMap[componentID];
-            const newID = uuid();
-            state.componentMap[newID] = {
-              ...cloned,
-              id: newID
-            };
-            return newID;
-          });
-          state.columnMap[newID] = {
-            ...cloned,
-            components,
-            id: newID
-          };
-          return newID;
-        });
-        state.rowMap[rowID] = {
-          ...clone,
-          columns,
-          id: rowID
-        };
-        return
-      }
-      case DELETE_ROW: {
-        const [removed] = state.ordered.splice(action.payload.index, 1);
-        delete state.rowMap[removed.id];
-        return
-      }
-      case REORDER_ROW: {
-        const result = action.payload;
-        state.ordered = reorder(
-          state.ordered,
-          result.source.index,
-          result.destination.index
-        );
-        return
-      }
-      case REORDER_COLUMN: {
-        const result = action.payload;
-        if (result.source.droppableId === result.destination.droppableId) {
-          const id = result.source.droppableId;
-          state.rowMap[id].columns = reorder(
-            state.rowMap[id].columns,
-            result.source.index,
-            result.destination.index
-          );
-        } else {
-          // TODO: move
-          const sourceID = result.source.droppableId;
-          const destID = result.destination.droppableId;
-          const sourceRow = state.rowMap[sourceID];
-          const destRow = state.rowMap[destID];
-          const sourceColumns = Array.from(sourceRow.columns);
-          const destColumns = Array.from(destRow.columns);
-
-          const [removed] = sourceColumns.splice(result.source.index, 1);
-          destColumns.splice(result.destination.index, 0, removed);
-
-          state.rowMap[sourceID] = {
-            ...sourceRow,
-            columns: sourceColumns
-          };
-          state.rowMap[destID] = { ...destRow, columns: destColumns };
+  switch (action.type) {
+    case ADD_ROW: {
+      const rowID = uuid();
+      const colID = uuid();
+      state.ordered.push(rowID);
+      state.rowMap[rowID] = {
+        id: rowID,
+        columns: [colID],
+        props: {
+          backgroundImage: "path/to/some/bg.png",
+          backgroundColor: "#0000ff",
+          fluid: false
         }
-
-        return
-      }
-      case REORDER_WIDGET: {
-        const result = action.payload;
-        if (result.source.droppableId === result.destination.droppableId) {
-          const id = result.source.droppableId;
-          state.columnMap[id].components = reorder(
-            state.columnMap[id].components,
-            result.source.index,
-            result.destination.index
-          );
-        } else {
-          // TODO: move
-          const sourceID = result.source.droppableId;
-          const destID = result.destination.droppableId;
-          const sourceCol = state.columnMap[sourceID];
-          const destCol = state.columnMap[destID];
-          const sourceComponents = Array.from(sourceCol.components);
-          const destComponents = Array.from(destCol.components);
-
-          const [removed] = sourceComponents.splice(result.source.index, 1);
-          destComponents.splice(result.destination.index, 0, removed);
-
-          state.columnMap[sourceID] = {
-            ...sourceCol,
-            components: sourceComponents
-          };
-          state.columnMap[destID] = { ...destCol, components: destComponents };
+      };
+      state.columnMap[colID] = {
+        id: colID,
+        components: [],
+        props: {
+          mobileSpan: 4,
+          tabletSpan: 8,
+          desktopSpan: 12,
+          padding: { px: 12, py: 12 }
         }
-
-        return
-      }
-      case UPDATE_PROP: {
-        const payload = action.payload;
-        state[payload.mapKey][payload.id].props[payload.name] = payload.value;
-        return
-      }
-      case ADD_COLUMN: {
-        const payload = action.payload;
-        const id = uuid();
-        state.columnMap[id] = {
-          id: id,
-          components: [],
-          props: {
-            mobileSpan: 4,
-            tabletSpan: 8,
-            desktopSpan: 12,
-            padding: {px: 12, py: 12}
-          }
-        };
-        state.rowMap[payload.id].columns.push(id);
-        return
-      }
-      case ADD_WIDGET: {
-        const payload = action.payload;
-        const id = payload.id || uuid();
-        const component = {
-          id: id,
-          name: payload.name,
-          props: registry.getDefaultProps(payload.name),
-          hasChildren: false
-        };
-        state.componentMap[id] = component;
-        state.columnMap[payload.columnID].components.push(id);
-        return
-      }
-      case CLONE_WIDGET: {
-        const payload = action.payload;
-        const clone = state.componentMap[payload.id];
-        const id = uuid();
-        const component = {
-          ...clone,
-          id: id
-        };
-        state.componentMap[id] = component;
-        state.columnMap[payload.columnID].components.splice(
-          payload.index,
-          0,
-          id
-        );
-        return
-      }
-      case DELETE_WIDGET: {
-        const payload = action.payload;
-        delete state.componentMap[payload.id];
-        state.columnMap[payload.columnID].components.splice(payload.index, 1);
-        return
-      }
-      case DELETE_COLUMN: {
-        const payload = action.payload;
-        delete state.columnMap[payload.id];
-        state.rowMap[payload.rowID].columns.splice(payload.index, 1);
-        return
-      }
-      case CLONE_COLUMN: {
-        const payload = action.payload;
+      };
+      return;
+    }
+    case CLONE_ROW: {
+      const payload = action.payload;
+      const rowID = uuid();
+      const clone = state.rowMap[payload.id];
+      state.ordered.splice(payload.index, 0, rowID);
+      const columns = clone.columns.map(colID => {
         const newID = uuid();
-        const cloned = state.columnMap[payload.id];
+        const cloned = state.columnMap[colID];
         const components = cloned.components.map(componentID => {
           const cloned = state.componentMap[componentID];
           const newID = uuid();
@@ -353,21 +194,180 @@ const reducer = produce((state, action) => {
           components,
           id: newID
         };
-        state.rowMap[payload.rowID].columns.splice(payload.index, 0, newID);
-        return
-      }
-      case UPDATE_THEME: {
-        const payload = action.payload;
-        state.template.props[payload.name] = payload.value;
-        return
-      }
-      default:
-        throw new Error(`unsupported action: ${action.type}`);
+        return newID;
+      });
+      state.rowMap[rowID] = {
+        ...clone,
+        columns,
+        id: rowID
+      };
+      return;
     }
+    case DELETE_ROW: {
+      const [removed] = state.ordered.splice(action.payload.index, 1);
+      delete state.rowMap[removed.id];
+      return;
+    }
+    case REORDER_ROW: {
+      const result = action.payload;
+      state.ordered = reorder(
+        state.ordered,
+        result.source.index,
+        result.destination.index
+      );
+      return;
+    }
+    case REORDER_COLUMN: {
+      const result = action.payload;
+      if (result.source.droppableId === result.destination.droppableId) {
+        const id = result.source.droppableId;
+        state.rowMap[id].columns = reorder(
+          state.rowMap[id].columns,
+          result.source.index,
+          result.destination.index
+        );
+      } else {
+        // TODO: move
+        const sourceID = result.source.droppableId;
+        const destID = result.destination.droppableId;
+        const sourceRow = state.rowMap[sourceID];
+        const destRow = state.rowMap[destID];
+        const sourceColumns = Array.from(sourceRow.columns);
+        const destColumns = Array.from(destRow.columns);
+
+        const [removed] = sourceColumns.splice(result.source.index, 1);
+        destColumns.splice(result.destination.index, 0, removed);
+
+        state.rowMap[sourceID] = {
+          ...sourceRow,
+          columns: sourceColumns
+        };
+        state.rowMap[destID] = { ...destRow, columns: destColumns };
+      }
+
+      return;
+    }
+    case REORDER_WIDGET: {
+      const result = action.payload;
+      if (result.source.droppableId === result.destination.droppableId) {
+        const id = result.source.droppableId;
+        state.columnMap[id].components = reorder(
+          state.columnMap[id].components,
+          result.source.index,
+          result.destination.index
+        );
+      } else {
+        // TODO: move
+        const sourceID = result.source.droppableId;
+        const destID = result.destination.droppableId;
+        const sourceCol = state.columnMap[sourceID];
+        const destCol = state.columnMap[destID];
+        const sourceComponents = Array.from(sourceCol.components);
+        const destComponents = Array.from(destCol.components);
+
+        const [removed] = sourceComponents.splice(result.source.index, 1);
+        destComponents.splice(result.destination.index, 0, removed);
+
+        state.columnMap[sourceID] = {
+          ...sourceCol,
+          components: sourceComponents
+        };
+        state.columnMap[destID] = { ...destCol, components: destComponents };
+      }
+
+      return;
+    }
+    case UPDATE_PROP: {
+      const payload = action.payload;
+      state[payload.mapKey][payload.id].props[payload.name] = payload.value;
+      return;
+    }
+    case ADD_COLUMN: {
+      const payload = action.payload;
+      const id = uuid();
+      state.columnMap[id] = {
+        id: id,
+        components: [],
+        props: {
+          mobileSpan: 4,
+          tabletSpan: 8,
+          desktopSpan: 12,
+          padding: { px: 12, py: 12 }
+        }
+      };
+      state.rowMap[payload.id].columns.push(id);
+      return;
+    }
+    case ADD_WIDGET: {
+      const payload = action.payload;
+      const id = payload.id || uuid();
+      const component = {
+        id: id,
+        name: payload.name,
+        props: registry.getDefaultProps(payload.name),
+        hasChildren: false
+      };
+      state.componentMap[id] = component;
+      state.columnMap[payload.columnID].components.push(id);
+      return;
+    }
+    case CLONE_WIDGET: {
+      const payload = action.payload;
+      const clone = state.componentMap[payload.id];
+      const id = uuid();
+      const component = {
+        ...clone,
+        id: id
+      };
+      state.componentMap[id] = component;
+      state.columnMap[payload.columnID].components.splice(payload.index, 0, id);
+      return;
+    }
+    case DELETE_WIDGET: {
+      const payload = action.payload;
+      delete state.componentMap[payload.id];
+      state.columnMap[payload.columnID].components.splice(payload.index, 1);
+      return;
+    }
+    case DELETE_COLUMN: {
+      const payload = action.payload;
+      delete state.columnMap[payload.id];
+      state.rowMap[payload.rowID].columns.splice(payload.index, 1);
+      return;
+    }
+    case CLONE_COLUMN: {
+      const payload = action.payload;
+      const newID = uuid();
+      const cloned = state.columnMap[payload.id];
+      const components = cloned.components.map(componentID => {
+        const cloned = state.componentMap[componentID];
+        const newID = uuid();
+        state.componentMap[newID] = {
+          ...cloned,
+          id: newID
+        };
+        return newID;
+      });
+      state.columnMap[newID] = {
+        ...cloned,
+        components,
+        id: newID
+      };
+      state.rowMap[payload.rowID].columns.splice(payload.index, 0, newID);
+      return;
+    }
+    case UPDATE_THEME: {
+      const payload = action.payload;
+      state.template.props[payload.name] = payload.value;
+      return;
+    }
+    default:
+      throw new Error(`unsupported action: ${action.type}`);
+  }
 });
 
-const useDragState = () => {
-  return useReducer(reducer, null, makeData);
+const useDragState = initialValue => {
+  return useReducer(reducer, initialValue, makeData);
 };
 
 export default useDragState;
