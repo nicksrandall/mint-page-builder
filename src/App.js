@@ -129,7 +129,7 @@ const onConfigure = sdk => {
 const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
   useEffect(() => {
-    sdk.onConfigure(() => onConfigure(sdk));
+    sdk.app.onConfigure(() => onConfigure(sdk));
     sdk.app.getParameters().then(parameters => {
       console.log('params', parameters);
       sdk.app.setReady();
