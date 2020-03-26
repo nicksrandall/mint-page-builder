@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
@@ -6,8 +6,9 @@ import "@reach/tooltip/styles.css";
 import styled from "@emotion/styled";
 import { DELETE_WIDGET, CLONE_WIDGET } from "../hooks/useDragState";
 import Icon from "./Icon";
-import {useDragUpdater} from "../contexts/DragContext";
-import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";
+import { useDragUpdater } from "../contexts/DragContext";
+import { useDrawerState, useDrawerUpdater } from "../contexts/DrawerContext";
+import registry from "../utils/componentRegistery";
 
 const HeaderControl = styled.button({
   color: "inherit",
@@ -18,15 +19,12 @@ const HeaderControl = styled.button({
   margin: 0
 });
 
-const Widget = React.memo(({
-  rowID,
-  columnID,
-  widget,
-  index,
-}) => {
+const Widget = React.memo(({ rowID, columnID, widget, index }) => {
   const dispatch = useDragUpdater();
   const setDrawerState = useDrawerUpdater();
   const drawerState = useDrawerState();
+  const propKeys = useMemo(() => Object.keys(widget.props).sort(), [widget.props]);
+
   return (
     <Draggable draggableId={widget.id} index={index}>
       {(provided, snapshot) => (
@@ -122,34 +120,27 @@ const Widget = React.memo(({
                 padding: "4px"
               }}
             >
-              {Object.keys(widget.props).map(name => {
-                return (
-                  <div
-                    key={name}
-                    css={{
-                      fontSize: "12px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }}
-                  >
-                    <strong>{name}:</strong>
-                    {` `}
-                    <Tooltip
+              {propKeys.length ? (
+                propKeys.map(name => {
+                  const type = registry.getPropDisplayType(widget.name, name);
+                  return (
+                    <div
+                      key={name}
                       css={{
-                        padding: "4px",
                         fontSize: "12px",
-                        background: "#ccc",
-                        color: "#000",
-                        border: "none"
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis"
                       }}
-                      label={widget.props[name]}
                     >
-                      <span>{widget.props[name]}</span>
-                    </Tooltip>
-                  </div>
-                );
-              })}
+                      <strong>{name}:</strong>
+                      {` `}
+                    </div>
+                  );
+                })
+              ) : (
+                <p>This widget has not configurable props</p>
+              )}
             </div>
           </div>
         </div>
@@ -157,5 +148,66 @@ const Widget = React.memo(({
     </Draggable>
   );
 });
+
+const Display = ({ type, value }) => {
+  switch (type) {
+    case "text":
+      return (
+        <Tooltip
+          css={{
+            padding: "4px",
+            fontSize: "12px",
+            background: "#ccc",
+            maxWidth: "300px",
+            color: "#000",
+            border: "none"
+          }}
+          label={value}
+        >
+          <span>{value}</span>
+        </Tooltip>
+      );
+    case "image":
+      return (
+        <Tooltip
+          css={{
+            padding: "4px",
+            fontSize: "12px",
+            background: "#ccc",
+            maxWidth: "300px",
+            color: "#000",
+            border: "none"
+          }}
+          label={value}
+        >
+          <img css={{ width: "48px", display: "inline-block" }} src={value} />
+        </Tooltip>
+      );
+    case "color":
+    default:
+      return (
+        <Tooltip
+          css={{
+            padding: "4px",
+            fontSize: "12px",
+            background: "#ccc",
+            maxWidth: "300px",
+            color: "#000",
+            border: "none"
+          }}
+          label={value}
+        >
+          <div
+            css={{
+              backgroundColor: value,
+              width: "48px",
+              height: "48px",
+              display: "inline-block"
+            }}
+          />
+        </Tooltip>
+      );
+  }
+};
 
 export default Widget;
