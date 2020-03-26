@@ -19,23 +19,21 @@ init(sdk => {
     sdk.window.updateHeight();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
-      <React.StrictMode>
-        <Button
-          buttonType="primary"
-          icon="edit"
-          onClick={() => {
-            sdk.dialogs.openCurrentApp({
-              title: "Page Builder",
-              width: "fullWidth",
-              minHeight: "100vh",
-              shouldCloseOnOverlayClick: true,
-              parameters: { ids: sdk.ids }
-            });
-          }}
-        >
-          Open page builder
-        </Button>
-      </React.StrictMode>,
+      <Button
+        buttonType="primary"
+        icon="edit"
+        onClick={() => {
+          sdk.dialogs.openCurrentApp({
+            title: "Page Builder",
+            width: "fullWidth",
+            minHeight: "100vh",
+            shouldCloseOnOverlayClick: true,
+            parameters: { ids: sdk.ids }
+          });
+        }}
+      >
+        Open page builder
+      </Button>,
       document.getElementById("root")
     );
   }
