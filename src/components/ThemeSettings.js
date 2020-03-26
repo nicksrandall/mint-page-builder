@@ -1,14 +1,32 @@
 import React from "react";
 
-import { SectionHeading } from "./DrawerUtils";
+import { format } from "./utils/formatJSON";
+import { useDragState } from "./contexts/DragContext";
 
-const TemplateSettings = ({onClick}) => {
+const SaveButton = ({ onSave }) => {
+  const state = useDragState();
+  return (
+    <button
+      css={{
+        padding: "12px 24px",
+        border: "none",
+        background: "#66beb2",
+        color: "#fff"
+      }}
+      onClick={() => onSave(format(state))}
+    >
+      Save layout
+    </button>
+  );
+};
+
+const TemplateSettings = ({ onClick, onSave }) => {
   return (
     <div css={{ width: "100%" }}>
       <div
         onClick={onClick}
         css={{
-          cursor: 'pointer',
+          cursor: "pointer",
           padding: "8px",
           display: "flex",
           alignItems: "center",
@@ -18,8 +36,7 @@ const TemplateSettings = ({onClick}) => {
         <span css={{ paddingLeft: "8px" }}>Template Settings</span>
       </div>
       <div css={{ padding: "8px" }}>
-        <SectionHeading>Props</SectionHeading>
-        <p>Global settings could go here?</p>
+        <SaveButton onSave={onSave} />
       </div>
     </div>
   );

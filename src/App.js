@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import styled from "@emotion/styled";
 import { ThemeProvider } from "theme-ui";
 import { base } from "@theme-ui/presets";
 
@@ -12,7 +11,6 @@ import {
 } from "./hooks/useDragState";
 import Sidebar from "./components/Sidebar";
 import Row from "./components/Row";
-import Preview from "./components/Preview";
 import {
   DragProvider,
   useDragState,
@@ -21,16 +19,8 @@ import {
 import { DrawerProvider, useDrawerUpdater } from "./contexts/DrawerContext";
 import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
-import { format, unformat } from "./utils/formatJSON";
+import { unformat } from "./utils/formatJSON";
 import { SDKContext } from "./contexts/ContentfulSDK";
-
-const HeaderButton = styled.button`
-  background: ${({ active }) => (active ? "#fff" : "#a9ebe2")};
-  border: 1px solid #a9ebe2;
-  outline: none;
-  padding: 8px 12px;
-  cursor: pointer;
-`;
 
 const Rows = () => {
   const state = useDragState();
@@ -124,24 +114,8 @@ const MenuButton = () => {
   );
 };
 
-const SaveButton = ({ onSave }) => {
-  const state = useDragState();
-  return (
-    <button
-      css={{
-        padding: "12px 24px",
-        border: "none",
-        background: "transparent"
-      }}
-      onClick={() => onSave(format(state))}
-    >
-      Save
-    </button>
-  );
-};
 
 const App = ({ sdk, initialValue, onClose }) => {
-  const [preview, setPreview] = useState(false);
   return (
     <SDKContext.Provider value={sdk}>
       <ThemeProvider theme={base}>
@@ -150,77 +124,31 @@ const App = ({ sdk, initialValue, onClose }) => {
             <div
               css={{
                 display: "flex",
-                flexDirection: "column",
-                height: "100vh",
-                width: "100%",
-                overflowX: "hidden"
+                height: "100%",
+                overflow: "hidden",
+                position: "relative"
               }}
             >
-              {/* app bar */}
-              <div
-                css={{
-                  height: "56px",
-                  width: "100%",
-                  background: "#66beb2",
-                  color: "#fff",
-                  padding: "16px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  boxShadow: "0 2px 4px rgba(0,0,0,.5)",
-                  zIndex: 1
-                }}
-              >
-                <div css={{ fontSize: "24px" }}>Mint</div>
-                <div css={{ display: "flex", alignItems: "center" }}>
-                  <SaveButton onSave={onClose} />
-                  <HeaderButton
-                    active={!preview}
-                    onClick={() => setPreview(false)}
-                  >
-                    Settings
-                  </HeaderButton>
-                  <HeaderButton
-                    active={preview}
-                    onClick={() => setPreview(true)}
-                  >
-                    Preview
-                  </HeaderButton>
-                  <MenuButton />
-                </div>
-              </div>
-              {preview ? (
-                <Preview />
-              ) : (
+              {/* content area */}
+              <Drag>
                 <div
                   css={{
-                    display: "flex",
+                    backgroundColor: "#f8f8f8",
+                    width: "100%",
                     height: "100%",
-                    overflow: "hidden",
-                    position: "relative"
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    overflowX: "hidden"
                   }}
                 >
-                  {/* content area */}
-                  <Drag>
-                    <div
-                      css={{
-                        backgroundColor: "#f8f8f8",
-                        width: "100%",
-                        height: "100%",
-                        flexGrow: 1,
-                        flexShrink: 1,
-                        overflowX: "hidden"
-                      }}
-                    >
-                      <div css={{ padding: "16px" }}>
-                        <Rows />
-                        <AddMore />
-                      </div>
-                    </div>
-                  </Drag>
-                  {/* side bar */}
-                  <Sidebar />
+                  <div css={{ padding: "16px" }}>
+                    <Rows />
+                    <AddMore />
+                  </div>
                 </div>
-              )}
+              </Drag>
+              {/* side bar */}
+              <Sidebar onSave={onClose} />
             </div>
           </DrawerProvider>
         </DragProvider>
