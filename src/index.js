@@ -16,25 +16,26 @@ init(sdk => {
       </React.StrictMode>,
       document.getElementById("root")
     );
-    sdk.window.updateHeight();
+    sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     console.log('button', Button);
     ReactDOM.render(
-      <button
+      <Button
         buttonType="primary"
-        icon="edit"
+        icon="Edit"
+        size="large"
         onClick={() => {
           sdk.dialogs.openCurrentApp({
             title: "Page Builder",
             width: "fullWidth",
-            minHeight: "100vh",
+            minHeight: "960px",
             shouldCloseOnOverlayClick: true,
             parameters: { ids: sdk.ids }
           });
         }}
       >
         Open page builder
-      </button>,
+      </Button>,
       document.getElementById("root")
     );
   }
