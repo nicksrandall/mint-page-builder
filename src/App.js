@@ -21,7 +21,7 @@ import {
 import { DrawerProvider, useDrawerUpdater } from "./contexts/DrawerContext";
 import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
-import format from "./utils/formatJSON";
+import { format, unformat } from "./utils/formatJSON";
 import { SDKContext } from "./contexts/ContentfulSDK";
 
 const HeaderButton = styled.button`
@@ -145,7 +145,7 @@ const App = ({ sdk, initialValue, onClose }) => {
   return (
     <SDKContext.Provider value={sdk}>
       <ThemeProvider theme={base}>
-        <DragProvider sdk={sdk} initialValue={initialValue}>
+        <DragProvider sdk={sdk} initialValue={unformat(initialValue)}>
           <DrawerProvider>
             <div
               css={{

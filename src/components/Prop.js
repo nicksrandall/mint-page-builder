@@ -12,7 +12,7 @@ import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { UPDATE_PROP } from "../hooks/useDragState";
 // import WYSIWYG from './Slate';
 import WYSIWYG from "./Wysiwyg";
-import {useSDK} from '../contexts/ContentfulSDK';
+import { useSDK } from "../contexts/ContentfulSDK";
 
 const debounce = (callback, options) => {
   const debounced = debounceFn(callback, options);

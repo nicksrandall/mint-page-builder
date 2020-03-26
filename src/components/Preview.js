@@ -5,7 +5,7 @@ import Icon from "./Icon";
 
 import KitPreview from './KitPreview';
 import {useDragState} from '../contexts/DragContext'
-import format from '../utils/formatJSON';
+import {format} from '../utils/formatJSON';
 
 const Control = styled.button`
   background: ${({ active }) => (active ? "#66beb2" : "#fff")};

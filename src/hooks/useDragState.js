@@ -54,13 +54,6 @@ const makeData = initialValue => {
   const comp3 = uuid();
 
   return {
-    template: {
-      props: {
-        template: "main",
-        logo:
-          "https://i.pinimg.com/originals/7c/51/98/7c5198d2a0751fa76c8433dba4a1a12a.jpg"
-      }
-    },
     rowMap: {
       [row1]: {
         id: row1,
