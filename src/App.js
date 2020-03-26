@@ -119,7 +119,7 @@ const MenuButton = () => {
 };
 
 const App = ({ sdk, initialValue, onClose }) => {
-  const [showJSON, setShowJSON] = useState(true);
+  const [showJSON, setShowJSON] = useState(false);
   return (
     <SDKContext.Provider value={sdk}>
       <ThemeProvider theme={base}>
