@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
@@ -23,7 +23,9 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
   const dispatch = useDragUpdater();
   const setDrawerState = useDrawerUpdater();
   const drawerState = useDrawerState();
-  const propKeys = useMemo(() => Object.keys(widget.props).sort(), [widget.props]);
+  const propKeys = useMemo(() => Object.keys(widget.props).sort(), [
+    widget.props
+  ]);
 
   return (
     <Draggable draggableId={widget.id} index={index}>

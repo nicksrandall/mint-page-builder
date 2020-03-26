@@ -23,7 +23,7 @@ const Drawer = ({ depth, maxDepth, open, children }) => {
         position: "absolute",
         width: "270px",
         top: `${depth * 48}px`,
-        height: `calc(100vh - ${(depth + 1) * 48}px)`,
+        height: `calc(100vh - ${depth * 48}px)`,
         left: 0,
         background: "#fff",
         transition: "transform 250ms ease-out",
@@ -41,7 +41,7 @@ const Drawer = ({ depth, maxDepth, open, children }) => {
   );
 };
 
-const Sidebar = ({onSave}) => {
+const Sidebar = ({ onSave }) => {
   const data = useDragState();
   const state = useDrawerState();
   const setState = useDrawerUpdater();
