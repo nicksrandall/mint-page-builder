@@ -131,7 +131,7 @@ const SaveButton = ({ sdk }) => {
         border: "none",
         background: "transparent"
       }}
-      onClick={() => sdk.field.setValue(state)}
+      onClick={() => sdk.entry.fields.layout.setValue(state)}
     >
       Save
     </button>
@@ -142,7 +142,7 @@ const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
   return (
     <ThemeProvider theme={base}>
-      <DragProvider sdk={sdk} initialValue={sdk?.field?.getValue()}>
+      <DragProvider sdk={sdk} initialValue={sdk?.entry?.fields?.layout?.getValue()}>
         <DrawerProvider>
           <div
             css={{
