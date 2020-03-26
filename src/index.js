@@ -18,7 +18,6 @@ init(sdk => {
     );
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
-    console.log('button', Button);
     ReactDOM.render(
       <Button
         buttonType="primary"

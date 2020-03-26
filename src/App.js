@@ -141,8 +141,10 @@ const SaveButton = ({ entry }) => {
 const App = ({ sdk }) => {
   const [preview, setPreview] = useState(false);
   const entry = useMemo(() => {
+    console.log('id', sdk.parameters.invocation.ids.entry); 
     return sdk.space.getEntry(sdk.parameters.invocation.ids.entry);
   }, [sdk.parameters.invocation.ids.entry, sdk.space]);
+  console.log('entry', entry);
   return (
     <ThemeProvider theme={base}>
       <DragProvider sdk={sdk} initialValue={entry?.fields?.layout?.getValue()}>
