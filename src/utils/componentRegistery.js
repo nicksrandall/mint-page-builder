@@ -30,7 +30,7 @@ class Registery {
     }, {});
   }
   getPropDisplayType(name, prop) {
-    return this._components?.[name]?.props?.[prop] || "text";
+    return this._components?.[name]?.props?.[prop]?.displayType || "text";
   }
   getComponents() {
     return this._registry.default.map(id => this._components[id]);
