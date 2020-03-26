@@ -137,6 +137,7 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
                     >
                       <strong>{name}:</strong>
                       {` `}
+                      <Display type={type} value={widget.props[name]} />
                     </div>
                   );
                 })
