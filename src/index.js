@@ -5,7 +5,7 @@ import App from "./App";
 // import * as serviceWorker from './serviceWorker';
 import "@contentful/forma-36-react-components/dist/styles.css";
 import "@contentful/forma-36-fcss/dist/styles.css";
-import { Button } from "@contentful/forma-36-react-components";
+import { Button, Note } from "@contentful/forma-36-react-components";
 import { init, locations } from "contentful-ui-extensions-sdk";
 
 init(sdk => {
@@ -23,6 +23,27 @@ init(sdk => {
       document.getElementById("root")
     );
     sdk.window.updateHeight(960);
+  } else if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
+    sdk.app.onConfigure(() => {
+      return {
+        parameters: { components: [] },
+        targetState: {
+          EditorInterface: {
+            page: {
+              controls: [{ fieldId: "layout" }]
+            }
+          }
+        }
+      };
+    });
+    ReactDOM.render(
+      <React.StrictMode>
+        <Note>Someday, component configuration will go here</Note>
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    sdk.window.startAutoResizer();
+    sdk.app.setReady();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
       <Button
@@ -39,7 +60,7 @@ init(sdk => {
               parameters: { initialValue: sdk.field.getValue() }
             })
             .then(data => {
-              console.log('set field', data);
+              console.log("set field", data);
               if (data) {
                 return sdk.field.setValue(data);
               }
