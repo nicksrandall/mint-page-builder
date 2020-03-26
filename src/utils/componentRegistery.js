@@ -66,7 +66,7 @@ registry.register({
     {
       name: "typography",
       displayName: "Typography",
-      displayType: "text",
+      displayType: "json",
       type: "typography",
       defaultValue: { px: 12, py: 12 }
     },

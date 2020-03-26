@@ -204,7 +204,6 @@ const Display = ({ type, value }) => {
         </Tooltip>
       );
     case "color":
-    default:
       return (
         <Tooltip
           css={{
@@ -222,12 +221,30 @@ const Display = ({ type, value }) => {
           <div
             css={{
               backgroundColor: value,
-              border: '1px solid #000',
+              border: "1px solid #000",
               width: "22px",
               height: "22px",
               display: "inline-block"
             }}
           />
+        </Tooltip>
+      );
+    case "json":
+    default:
+      return (
+        <Tooltip
+          css={{
+            padding: "4px",
+            fontSize: "12px",
+            background: "#ccc",
+            maxWidth: "300px",
+            color: "#000",
+            border: "none",
+            whiteSpace: "pre"
+          }}
+          label={JSON.stringify(value, null, "  ")}
+        >
+          {JSON.stringify(value)}
         </Tooltip>
       );
   }
