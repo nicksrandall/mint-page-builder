@@ -5,10 +5,10 @@ import App from "./App";
 // import * as serviceWorker from './serviceWorker';
 import "@contentful/forma-36-react-components/dist/styles.css";
 import "@contentful/forma-36-fcss/dist/styles.css";
+import { Button } from "@contentful/forma-36-react-components";
 import { init, locations } from "contentful-ui-extensions-sdk";
 
 init(sdk => {
-  console.log("sdk", sdk);
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
     ReactDOM.render(
       <React.StrictMode>
@@ -17,13 +17,26 @@ init(sdk => {
       document.getElementById("root")
     );
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
-    sdk.dialogs.openCurrentApp({
-      title: "Page Builder",
-      width: "fullWidth",
-      minHeight: '100vh',
-      shouldCloseOnOverlayClick: true,
-      parameters: { ids: sdk.ids }
-    });
+    ReactDOM.render(
+      <React.StrictMode>
+        <Button
+          buttonType="primary"
+          icon="edit"
+          onClick={() => {
+            sdk.dialogs.openCurrentApp({
+              title: "Page Builder",
+              width: "fullWidth",
+              minHeight: "100vh",
+              shouldCloseOnOverlayClick: true,
+              parameters: { ids: sdk.ids }
+            });
+          }}
+        >
+          Open page builder
+        </Button>
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
   }
   sdk.window.startAutoResizer();
 
