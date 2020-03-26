@@ -43,7 +43,9 @@ init(sdk => {
       document.getElementById("root")
     );
     sdk.window.startAutoResizer();
-    sdk.app.setReady();
+    window.setTimeout(() => {
+      sdk.app.setReady();
+    }, 50);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
       <Button
