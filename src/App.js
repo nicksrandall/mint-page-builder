@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 import { ThemeProvider } from "theme-ui";
@@ -138,12 +138,8 @@ const SaveButton = ({ entry }) => {
   );
 };
 
-const App = ({ sdk }) => {
+const App = ({ sdk, entry }) => {
   const [preview, setPreview] = useState(false);
-  const entry = useMemo(() => {
-    console.log('id', sdk.parameters.invocation.ids.entry); 
-    return sdk.space.getEntry(sdk.parameters.invocation.ids.entry);
-  }, [sdk.parameters.invocation.ids.entry, sdk.space]);
   console.log('entry', entry);
   return (
     <ThemeProvider theme={base}>

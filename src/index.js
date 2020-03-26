@@ -10,12 +10,14 @@ import { init, locations } from "contentful-ui-extensions-sdk";
 
 init(sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <App sdk={sdk} />
-      </React.StrictMode>,
-      document.getElementById("root")
-    );
+    sdk.space.getEntry(sdk.parameters.invocation.ids.entry).then(entry => {
+      ReactDOM.render(
+        <React.StrictMode>
+          <App sdk={sdk} entry={entry} />
+        </React.StrictMode>,
+        document.getElementById("root")
+      );
+    });
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
