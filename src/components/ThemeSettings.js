@@ -1,7 +1,7 @@
 import React from "react";
 
-import { format } from "./utils/formatJSON";
-import { useDragState } from "./contexts/DragContext";
+import { format } from "../utils/formatJSON";
+import { useDragState } from "../contexts/DragContext";
 
 const SaveButton = ({ onSave }) => {
   const state = useDragState();
