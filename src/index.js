@@ -13,7 +13,13 @@ init(sdk => {
     sdk.space.getEntry(sdk.parameters.invocation.ids.entry).then(entry => {
       ReactDOM.render(
         <React.StrictMode>
-          <App sdk={sdk} entry={entry} />
+          <App
+            sdk={sdk}
+            entry={entry}
+            onClose={data => {
+              sdk.close(data);
+            }}
+          />
         </React.StrictMode>,
         document.getElementById("root")
       );
@@ -26,13 +32,20 @@ init(sdk => {
         icon="Edit"
         size="large"
         onClick={() => {
-          sdk.dialogs.openCurrentApp({
-            title: "Page Builder",
-            width: "fullWidth",
-            minHeight: "960px",
-            shouldCloseOnOverlayClick: true,
-            parameters: { ids: sdk.ids }
-          });
+          sdk.dialogs
+            .openCurrentApp({
+              title: "Page Builder",
+              width: "fullWidth",
+              minHeight: "960px",
+              shouldCloseOnOverlayClick: true,
+              parameters: { ids: sdk.ids }
+            })
+            .then(data => {
+              console.log('set field', data);
+              if (data) {
+                return sdk.field.setValue(data);
+              }
+            });
         }}
       >
         Open page builder

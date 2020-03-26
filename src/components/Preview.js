@@ -5,6 +5,7 @@ import Icon from "./Icon";
 
 import KitPreview from './KitPreview';
 import {useDragState} from '../contexts/DragContext'
+import format from '../utils/formatJSON';
 
 const Control = styled.button`
   background: ${({ active }) => (active ? "#66beb2" : "#fff")};
@@ -21,40 +22,7 @@ const Control = styled.button`
 const Preview = () => {
   const state = useDragState();
   const tree = useMemo(() => {
-    const layout = state.ordered.map(id => {
-      const row = state.rowMap[id];
-      const children = row.columns.map(id => {
-        const column = state.columnMap[id];
-        const children = column.components.map(id => {
-          const component = state.componentMap[id];
-          // TODO handle children in components
-          return {
-            id: component.id,
-            name: component.name,
-            props: component.props,
-            children: component.hasChildren ? [] : []
-          };
-        });
-        return {
-          id: id,
-          name: "column",
-          props: column.props,
-          children: children
-        };
-      });
-      return {
-        id: id,
-        name: "row",
-        props: row.props,
-        children: children
-      };
-    });
-    return {
-      name: "Sample Page Name",
-      slug: "some-slug",
-      template: state.template.props,
-      layout
-    };
+    return format(state);
   }, [state]);
 
   const [width, setWidth] = useState(960);

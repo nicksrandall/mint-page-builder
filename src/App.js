@@ -21,6 +21,7 @@ import {
 import { DrawerProvider, useDrawerUpdater } from "./contexts/DrawerContext";
 import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
+import format from './utils/formatJSON';
 
 const HeaderButton = styled.button`
   background: ${({ active }) => (active ? "#fff" : "#a9ebe2")};
@@ -122,7 +123,7 @@ const MenuButton = () => {
   );
 };
 
-const SaveButton = ({ entry }) => {
+const SaveButton = ({ onSave }) => {
   const state = useDragState();
   return (
     <button
@@ -131,16 +132,15 @@ const SaveButton = ({ entry }) => {
         border: "none",
         background: "transparent"
       }}
-      onClick={() => entry.fields.layout.setValue(state)}
+      onClick={() => onSave(format(state))}
     >
       Save
     </button>
   );
 };
 
-const App = ({ sdk, entry }) => {
+const App = ({ sdk, entry, onClose }) => {
   const [preview, setPreview] = useState(false);
-  console.log('entry', entry);
   return (
     <ThemeProvider theme={base}>
       <DragProvider sdk={sdk} initialValue={entry?.fields?.layout?.getValue()}>
@@ -170,7 +170,7 @@ const App = ({ sdk, entry }) => {
             >
               <div css={{ fontSize: "24px" }}>Mint</div>
               <div css={{ display: "flex", alignItems: "center" }}>
-                <SaveButton entry={entry} />
+                <SaveButton onSave={onClose} />
                 <HeaderButton
                   active={!preview}
                   onClick={() => setPreview(false)}
