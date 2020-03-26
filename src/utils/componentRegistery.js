@@ -29,6 +29,9 @@ class Registery {
       return memo;
     }, {});
   }
+  getPropDisplayType(name, prop) {
+    return this._components?.[name]?.props?.[prop] || "text";
+  }
   getComponents() {
     return this._registry.default.map(id => this._components[id]);
   }
@@ -43,6 +46,7 @@ registry.register({
     {
       name: "level",
       displayName: "Heading Level",
+      displayType: "text",
       type: "select",
       defaultValue: "h1",
       values: [
@@ -57,12 +61,14 @@ registry.register({
     {
       name: "typography",
       displayName: "Typography",
+      displayType: "text",
       type: "typography",
-      defaultValue: { px: 12, py: 12 },
+      defaultValue: { px: 12, py: 12 }
     },
     {
       name: "content",
       displayName: "Content",
+      displayType: "text",
       defaultValue: "",
       type: "text",
       section: "props"
@@ -77,12 +83,14 @@ registry.register({
     {
       name: "src",
       displayName: "Source URL",
+      displayType: "image",
       defaultValue: "",
       type: "media"
     },
     {
       name: "alt",
       displayName: "Alt Text",
+      displayType: "text",
       defaultValue: "",
       type: "text"
     }
@@ -96,6 +104,7 @@ registry.register({
     {
       name: "content",
       displayName: "Content",
+      displayType: "text",
       defaultValue: "",
       type: "WYSIWYG",
       section: "props"
@@ -110,6 +119,7 @@ registry.register({
     {
       name: "href",
       displayName: "Link URL",
+      displayType: "text",
       defaultValue: "",
       type: "url",
       section: "props"
@@ -117,6 +127,7 @@ registry.register({
     {
       name: "content",
       displayName: "Content",
+      displayType: "text",
       defaultValue: "",
       type: "text",
       section: "props"
@@ -124,6 +135,7 @@ registry.register({
     {
       name: "bgColor",
       displayName: "Background Color",
+      displayType: "color",
       defaultValue: "#66beb2",
       type: "color",
       section: "props"
@@ -131,6 +143,7 @@ registry.register({
     {
       name: "textColor",
       displayName: "Text Color",
+      displayType: "color",
       defaultValue: "#fff",
       type: "color",
       section: "props"
