@@ -8,7 +8,7 @@ import "@contentful/forma-36-fcss/dist/styles.css";
 import { init, locations } from "contentful-ui-extensions-sdk";
 
 init(sdk => {
-  console.log('sdk', sdk);
+  console.log("sdk", sdk);
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
     ReactDOM.render(
       <React.StrictMode>
@@ -20,7 +20,9 @@ init(sdk => {
     sdk.dialogs.openCurrentApp({
       title: "Page Builder",
       width: "fullWidth",
-      shouldCloseOnOverlayClick: true
+      minHeight: '100vh',
+      shouldCloseOnOverlayClick: true,
+      parameters: { ids: sdk.ids }
     });
   }
   sdk.window.startAutoResizer();
