@@ -16,6 +16,7 @@ init(sdk => {
       </React.StrictMode>,
       document.getElementById("root")
     );
+    sdk.window.updateHeight();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
       <React.StrictMode>
@@ -38,7 +39,6 @@ init(sdk => {
       document.getElementById("root")
     );
   }
-  sdk.window.startAutoResizer();
 
   // If you want your app to work offline and load faster, you can change
   // unregister() to register() below. Note this comes with some pitfalls.
