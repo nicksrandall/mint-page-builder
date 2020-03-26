@@ -44,11 +44,11 @@ init(sdk => {
       </React.StrictMode>,
       document.getElementById("root")
     );
-    sdk.window.startAutoResizer();
     window.setTimeout(() => {
       console.log("set ready");
       sdk.app.setReady();
     }, 50);
+    sdk.window.startAutoResizer();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
       <Button
