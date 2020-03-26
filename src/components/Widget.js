@@ -124,6 +124,7 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
             >
               {propKeys.length ? (
                 propKeys.map(name => {
+                  console.log('name, prop', widget.name, name);
                   const type = registry.getPropDisplayType(widget.name, name);
                   return (
                     <div
@@ -153,6 +154,7 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
 });
 
 const Display = ({ type, value }) => {
+  console.log("t,v", type, value);
   switch (type) {
     case "text":
       return (
@@ -163,7 +165,8 @@ const Display = ({ type, value }) => {
             background: "#ccc",
             maxWidth: "300px",
             color: "#000",
-            border: "none"
+            border: "none",
+            wordWrap: "break-word"
           }}
           label={value}
         >
@@ -179,7 +182,8 @@ const Display = ({ type, value }) => {
             background: "#ccc",
             maxWidth: "300px",
             color: "#000",
-            border: "none"
+            border: "none",
+            wordWrap: "break-word"
           }}
           label={value}
         >
@@ -196,7 +200,8 @@ const Display = ({ type, value }) => {
             background: "#ccc",
             maxWidth: "300px",
             color: "#000",
-            border: "none"
+            border: "none",
+            wordWrap: "break-word"
           }}
           label={value}
         >
