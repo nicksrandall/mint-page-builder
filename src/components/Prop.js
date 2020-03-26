@@ -193,7 +193,7 @@ const Media = ({ value, onChange }) => {
         onClick={() => {
           sdk.dialogs.selectSingleAsset().then(data => {
             console.log("data", data);
-            onChange(data?.fields?.file?.url);
+            onChange(data?.fields?.file['en-US'].url);
           });
         }}
       >
