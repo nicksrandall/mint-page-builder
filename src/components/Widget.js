@@ -222,8 +222,9 @@ const Display = ({ type, value }) => {
           <div
             css={{
               backgroundColor: value,
-              width: "24px",
-              height: "24px",
+              border: '1px solid #000',
+              width: "22px",
+              height: "22px",
               display: "inline-block"
             }}
           />
