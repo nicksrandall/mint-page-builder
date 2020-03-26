@@ -124,12 +124,13 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
             >
               {propKeys.length ? (
                 propKeys.map(name => {
-                  console.log("name, prop", widget.name, name);
                   const type = registry.getPropDisplayType(widget.name, name);
                   return (
                     <div
                       key={name}
                       css={{
+                        display: 'flex',
+                        alignItems: 'center',
                         fontSize: "12px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -154,7 +155,6 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
 });
 
 const Display = ({ type, value }) => {
-  console.log("t,v", type, value);
   switch (type) {
     case "text":
       return (
@@ -166,7 +166,8 @@ const Display = ({ type, value }) => {
             maxWidth: "300px",
             color: "#000",
             border: "none",
-            wordWrap: "break-word"
+            wordWrap: "break-word",
+            whiteSpace: 'normal',
           }}
           label={value}
         >
@@ -183,11 +184,12 @@ const Display = ({ type, value }) => {
             maxWidth: "300px",
             color: "#000",
             border: "none",
+            whiteSpace: 'normal',
             wordWrap: "break-word"
           }}
-          label={value}
+          label={<img src={value} css={{ width: '300px' }} alt="larger thumbnail" />}
         >
-          <img css={{ width: "48px", display: "inline-block" }} src={value} alt="thumbnail" />
+          <img css={{ height: "24px", display: "inline-block" }} src={value} alt="thumbnail" />
         </Tooltip>
       );
     case "color":
@@ -201,6 +203,7 @@ const Display = ({ type, value }) => {
             maxWidth: "300px",
             color: "#000",
             border: "none",
+            whiteSpace: 'normal',
             wordWrap: "break-word"
           }}
           label={value}
@@ -208,8 +211,8 @@ const Display = ({ type, value }) => {
           <div
             css={{
               backgroundColor: value,
-              width: "48px",
-              height: "48px",
+              width: "24px",
+              height: "24px",
               display: "inline-block"
             }}
           />
