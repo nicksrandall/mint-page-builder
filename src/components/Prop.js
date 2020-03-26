@@ -12,6 +12,7 @@ import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { UPDATE_PROP } from "../hooks/useDragState";
 // import WYSIWYG from './Slate';
 import WYSIWYG from "./Wysiwyg";
+import {useSDK} from '../contexts/ContentfulSDK';
 
 const debounce = (callback, options) => {
   const debounced = debounceFn(callback, options);
@@ -158,13 +159,47 @@ const BoxModel = ({ value, onChange }) => {
 
 const Typography = ({ value, onChange }) => {
   const { theme } = useThemeUI();
-  console.log('theme', theme);
+  return <Sx.Typography value={value} theme={theme} onChange={onChange} />;
+};
+
+const Media = ({ value, onChange }) => {
+  const sdk = useSDK();
   return (
-    <Sx.Typography
-      value={value}
-      theme={theme}
-      onChange={onChange}
-    />
+    <>
+      {value ? (
+        <img
+          src={value}
+          alt="selected media"
+          css={{
+            border: "1px solid #000",
+            width: "100%",
+            marginBottom: "8px"
+          }}
+        />
+      ) : (
+        <div
+          css={{
+            border: "1px solid #000",
+            padding: "32px",
+            textAlign: "center",
+            marginBottom: "8px",
+            overflowWrap: "break-word"
+          }}
+        >
+          No image set
+        </div>
+      )}
+      <Button
+        onClick={() => {
+          sdk.dialogs.selectSingleAsset().then(data => {
+            console.log("data", data);
+            onChange(data?.fields?.file?.url);
+          });
+        }}
+      >
+        Select from media library
+      </Button>
+    </>
   );
 };
 
@@ -273,34 +308,9 @@ export const PropView = React.memo(props => {
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
-          {value ? (
-            <img
-              src={value}
-              alt="selected media"
-              css={{
-                border: "1px solid #000",
-                width: "100%",
-                marginBottom: "8px"
-              }}
-            />
-          ) : (
-            <div
-              css={{
-                border: "1px solid #000",
-                padding: "32px",
-                textAlign: "center",
-                marginBottom: "8px",
-                overflowWrap: "break-word"
-              }}
-            >
-              No image set
-            </div>
-          )}
-          <Button
-            onClick={() => {
-              const url = prompt(
-                "Normally, this would interface with the media library from CMS. For now just enter a url to an image:"
-              );
+          <Media
+            value={value}
+            onChange={url => {
               dispatch({
                 type: action,
                 payload: {
@@ -311,9 +321,7 @@ export const PropView = React.memo(props => {
                 }
               });
             }}
-          >
-            Select from media library
-          </Button>
+          />
         </PropContainer>
       );
     case "range":

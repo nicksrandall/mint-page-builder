@@ -22,6 +22,7 @@ import { DrawerProvider, useDrawerUpdater } from "./contexts/DrawerContext";
 import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
 import format from "./utils/formatJSON";
+import { SDKContext } from "./contexts/ContentfulSDK";
 
 const HeaderButton = styled.button`
   background: ${({ active }) => (active ? "#fff" : "#a9ebe2")};
@@ -142,84 +143,89 @@ const SaveButton = ({ onSave }) => {
 const App = ({ sdk, initialValue, onClose }) => {
   const [preview, setPreview] = useState(false);
   return (
-    <ThemeProvider theme={base}>
-      <DragProvider sdk={sdk} initialValue={initialValue}>
-        <DrawerProvider>
-          <div
-            css={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100vh",
-              width: "100%",
-              overflowX: "hidden"
-            }}
-          >
-            {/* app bar */}
+    <SDKContext.Provider value={sdk}>
+      <ThemeProvider theme={base}>
+        <DragProvider sdk={sdk} initialValue={initialValue}>
+          <DrawerProvider>
             <div
               css={{
-                height: "56px",
-                width: "100%",
-                background: "#66beb2",
-                color: "#fff",
-                padding: "16px",
                 display: "flex",
-                justifyContent: "space-between",
-                boxShadow: "0 2px 4px rgba(0,0,0,.5)",
-                zIndex: 1
+                flexDirection: "column",
+                height: "100vh",
+                width: "100%",
+                overflowX: "hidden"
               }}
             >
-              <div css={{ fontSize: "24px" }}>Mint</div>
-              <div css={{ display: "flex", alignItems: "center" }}>
-                <SaveButton onSave={onClose} />
-                <HeaderButton
-                  active={!preview}
-                  onClick={() => setPreview(false)}
-                >
-                  Settings
-                </HeaderButton>
-                <HeaderButton active={preview} onClick={() => setPreview(true)}>
-                  Preview
-                </HeaderButton>
-                <MenuButton />
-              </div>
-            </div>
-            {preview ? (
-              <Preview />
-            ) : (
+              {/* app bar */}
               <div
                 css={{
+                  height: "56px",
+                  width: "100%",
+                  background: "#66beb2",
+                  color: "#fff",
+                  padding: "16px",
                   display: "flex",
-                  height: "100%",
-                  overflow: "hidden",
-                  position: "relative"
+                  justifyContent: "space-between",
+                  boxShadow: "0 2px 4px rgba(0,0,0,.5)",
+                  zIndex: 1
                 }}
               >
-                {/* content area */}
-                <Drag>
-                  <div
-                    css={{
-                      backgroundColor: "#f8f8f8",
-                      width: "100%",
-                      height: "100%",
-                      flexGrow: 1,
-                      flexShrink: 1,
-                      overflowX: "hidden"
-                    }}
+                <div css={{ fontSize: "24px" }}>Mint</div>
+                <div css={{ display: "flex", alignItems: "center" }}>
+                  <SaveButton onSave={onClose} />
+                  <HeaderButton
+                    active={!preview}
+                    onClick={() => setPreview(false)}
                   >
-                    <div css={{ padding: "16px" }}>
-                      <Rows />
-                      <AddMore />
-                    </div>
-                  </div>
-                </Drag>
-                {/* side bar */}
-                <Sidebar />
+                    Settings
+                  </HeaderButton>
+                  <HeaderButton
+                    active={preview}
+                    onClick={() => setPreview(true)}
+                  >
+                    Preview
+                  </HeaderButton>
+                  <MenuButton />
+                </div>
               </div>
-            )}
-          </div>
-        </DrawerProvider>
-      </DragProvider>
-    </ThemeProvider>
+              {preview ? (
+                <Preview />
+              ) : (
+                <div
+                  css={{
+                    display: "flex",
+                    height: "100%",
+                    overflow: "hidden",
+                    position: "relative"
+                  }}
+                >
+                  {/* content area */}
+                  <Drag>
+                    <div
+                      css={{
+                        backgroundColor: "#f8f8f8",
+                        width: "100%",
+                        height: "100%",
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        overflowX: "hidden"
+                      }}
+                    >
+                      <div css={{ padding: "16px" }}>
+                        <Rows />
+                        <AddMore />
+                      </div>
+                    </div>
+                  </Drag>
+                  {/* side bar */}
+                  <Sidebar />
+                </div>
+              )}
+            </div>
+          </DrawerProvider>
+        </DragProvider>
+      </ThemeProvider>
+    </SDKContext.Provider>
   );
 };
 
