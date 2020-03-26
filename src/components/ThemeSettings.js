@@ -9,7 +9,6 @@ const SaveButton = ({ onSave }) => {
     <button
       css={{
         padding: "12px 24px",
-        border: "none",
         width: '100%',
         background: "#66beb2",
         border: "1px solid #66beb2",

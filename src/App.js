@@ -100,9 +100,12 @@ const MenuButton = () => {
   return (
     <button
       css={mq({
+        position: 'fixed',
+        top: 12,
+        right: 12,
         display: ["block", "block", "none"],
         color: "#fff",
-        background: "transparent",
+        background: "#66beb2",
         border: "none",
         outline: "none",
         padding: "12px"
@@ -148,6 +151,7 @@ const App = ({ sdk, initialValue, onClose }) => {
                 </div>
               </Drag>
               {/* side bar */}
+              <MenuButton />
               <Sidebar onSave={onClose} />
             </div>
           </DrawerProvider>

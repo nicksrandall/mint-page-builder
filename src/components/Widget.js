@@ -124,7 +124,7 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
             >
               {propKeys.length ? (
                 propKeys.map(name => {
-                  console.log('name, prop', widget.name, name);
+                  console.log("name, prop", widget.name, name);
                   const type = registry.getPropDisplayType(widget.name, name);
                   return (
                     <div
@@ -187,7 +187,7 @@ const Display = ({ type, value }) => {
           }}
           label={value}
         >
-          <img css={{ width: "48px", display: "inline-block" }} src={value} />
+          <img css={{ width: "48px", display: "inline-block" }} src={value} alt="thumbnail" />
         </Tooltip>
       );
     case "color":

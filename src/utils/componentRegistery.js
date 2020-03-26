@@ -29,8 +29,13 @@ class Registery {
       return memo;
     }, {});
   }
+  getPropDisplayName(name, prop) {
+    return this._components?.[name]?.props.find(p => p.name === prop)
+      .displayName;
+  }
   getPropDisplayType(name, prop) {
-    return this._components?.[name]?.props?.[prop]?.displayType || "text";
+    return this._components?.[name]?.props.find(p => p.name === prop)
+      .displayType || 'text';
   }
   getComponents() {
     return this._registry.default.map(id => this._components[id]);
@@ -156,5 +161,8 @@ registry.register({
   icon: "horizontal_split",
   props: []
 });
+
+console.log("type", registry.getPropDisplayType("Image", "src"));
+console.log("name", registry.getPropDisplayName("Image", "src"));
 
 export default registry;
