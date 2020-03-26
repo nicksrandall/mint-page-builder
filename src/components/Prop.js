@@ -139,7 +139,7 @@ const ColorPicker = ({ value = "#66beb2", onChange }) => {
 };
 
 const bmReducer = (state, next) => ({ ...state, ...next });
-const BoxModel = ({ value, onChange }) => {
+const BoxModel = ({ value = {}, onChange }) => {
   const [style, setStyle] = useReducer(bmReducer, value);
   useEffect(() => {
     onChange(style);
@@ -156,7 +156,7 @@ const BoxModel = ({ value, onChange }) => {
   );
 };
 
-const Typography = ({ value, onChange }) => {
+const Typography = ({ value = {}, onChange }) => {
   const { theme } = useThemeUI();
   const [style, setStyle] = useReducer(bmReducer, value);
   useEffect(() => {
@@ -412,8 +412,16 @@ export const PropView = React.memo(props => {
           <Label>{definition.displayName}</Label>
           <Typography
             value={value}
-            onChange={value => {
-              console.log("value", value);
+            onChange={v => {
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: v
+                }
+              });
             }}
           />
         </PropContainer>
