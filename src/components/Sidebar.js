@@ -66,7 +66,7 @@ const Sidebar = ({onSave}) => {
         transition: "transform 250ms ease-out",
         width: "270px",
         background: "#fff",
-        height: "calc(100vh - 56px)",
+        height: "100vh",
         borderLeft: "1px solid rgba(0,0,0,0.14)",
         boxShadow: [
           "0 2px 4px rgba(0,0,0,.5)",
