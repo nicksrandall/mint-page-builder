@@ -34,8 +34,10 @@ class Registery {
       .displayName;
   }
   getPropDisplayType(name, prop) {
-    return this._components?.[name]?.props.find(p => p.name === prop)
-      .displayType || 'text';
+    return (
+      this._components?.[name]?.props.find(p => p.name === prop).displayType ||
+      "text"
+    );
   }
   getComponents() {
     return this._registry.default.map(id => this._components[id]);
@@ -68,7 +70,12 @@ registry.register({
       displayName: "Typography",
       displayType: "json",
       type: "typography",
-      defaultValue: { px: 12, py: 12 }
+      defaultValue: {
+        fontFamily: "body",
+        fontSize: 24,
+        fontWeight: "heading",
+        lineHeight: "heading"
+      }
     },
     {
       name: "content",

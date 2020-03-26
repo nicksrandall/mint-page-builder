@@ -142,7 +142,6 @@ const bmReducer = (state, next) => ({ ...state, ...next });
 const BoxModel = ({ value, onChange }) => {
   const [style, setStyle] = useReducer(bmReducer, value);
   useEffect(() => {
-    console.log("setting", style);
     onChange(style);
   }, [style, onChange]);
   return (
@@ -159,7 +158,17 @@ const BoxModel = ({ value, onChange }) => {
 
 const Typography = ({ value, onChange }) => {
   const { theme } = useThemeUI();
-  return <Sx.Typography value={value} theme={theme} onChange={onChange} />;
+  const [style, setStyle] = useReducer(bmReducer, value);
+  useEffect(() => {
+    onChange(style);
+  }, [style, onChange]);
+  return (
+    <Sx.Typography
+      value={style}
+      theme={theme}
+      onChange={value => setStyle(value)}
+    />
+  );
 };
 
 const Media = ({ value, onChange }) => {
@@ -193,7 +202,7 @@ const Media = ({ value, onChange }) => {
         onClick={() => {
           sdk.dialogs.selectSingleAsset().then(data => {
             console.log("data", data);
-            onChange(data?.fields?.file['en-US'].url);
+            onChange(data?.fields?.file["en-US"].url);
           });
         }}
       >
