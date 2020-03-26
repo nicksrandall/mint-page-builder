@@ -25,6 +25,7 @@ init(sdk => {
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
     sdk.app.onConfigure(() => {
+      console.log("on configure");
       return {
         parameters: { components: [] },
         targetState: {
@@ -36,6 +37,7 @@ init(sdk => {
         }
       };
     });
+    console.log("rendering", sdk);
     ReactDOM.render(
       <React.StrictMode>
         <Note>Someday, component configuration will go here</Note>
@@ -44,6 +46,7 @@ init(sdk => {
     );
     sdk.window.startAutoResizer();
     window.setTimeout(() => {
+      console.log("set ready");
       sdk.app.setReady();
     }, 50);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
