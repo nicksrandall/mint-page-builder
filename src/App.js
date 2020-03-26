@@ -21,7 +21,7 @@ import {
 import { DrawerProvider, useDrawerUpdater } from "./contexts/DrawerContext";
 import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
-import format from './utils/formatJSON';
+import format from "./utils/formatJSON";
 
 const HeaderButton = styled.button`
   background: ${({ active }) => (active ? "#fff" : "#a9ebe2")};
@@ -139,11 +139,11 @@ const SaveButton = ({ onSave }) => {
   );
 };
 
-const App = ({ sdk, entry, onClose }) => {
+const App = ({ sdk, initialValue, onClose }) => {
   const [preview, setPreview] = useState(false);
   return (
     <ThemeProvider theme={base}>
-      <DragProvider sdk={sdk} initialValue={entry?.fields?.layout?.getValue()}>
+      <DragProvider sdk={sdk} initialValue={initialValue}>
         <DrawerProvider>
           <div
             css={{

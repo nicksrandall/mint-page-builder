@@ -10,20 +10,18 @@ import { init, locations } from "contentful-ui-extensions-sdk";
 
 init(sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
-    sdk.space.getEntry(sdk.parameters.invocation.ids.entry).then(entry => {
-      ReactDOM.render(
-        <React.StrictMode>
-          <App
-            sdk={sdk}
-            entry={entry}
-            onClose={data => {
-              sdk.close(data);
-            }}
-          />
-        </React.StrictMode>,
-        document.getElementById("root")
-      );
-    });
+    ReactDOM.render(
+      <React.StrictMode>
+        <App
+          sdk={sdk}
+          initialValue={sdk.parameters.invocation.initialValue}
+          onClose={data => {
+            sdk.close(data);
+          }}
+        />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
@@ -38,7 +36,7 @@ init(sdk => {
               width: "fullWidth",
               minHeight: "960px",
               shouldCloseOnOverlayClick: true,
-              parameters: { ids: sdk.ids }
+              parameters: { initialValue: sdk.field.getValue() }
             })
             .then(data => {
               console.log('set field', data);
