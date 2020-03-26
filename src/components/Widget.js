@@ -244,7 +244,7 @@ const Display = ({ type, value }) => {
           }}
           label={JSON.stringify(value, null, "  ")}
         >
-          {JSON.stringify(value)}
+          <span>{JSON.stringify(value)}</span>
         </Tooltip>
       );
   }

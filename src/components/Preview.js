@@ -1,72 +1,66 @@
 import React, { useMemo, useState } from "react";
-import styled from "@emotion/styled";
+import { Controlled as CodeMirror } from "react-codemirror2";
+// import jsonlint from "jsonlint";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
 
-import Icon from "./Icon";
+import { FORCE_UPDATE } from "../hooks/useDragState";
+import { useDragState, useDragUpdater } from "../contexts/DragContext";
+import { format, unformat } from "../utils/formatJSON";
+import { Button } from "@contentful/forma-36-react-components";
 
-import KitPreview from './KitPreview';
-import {useDragState} from '../contexts/DragContext'
-import {format} from '../utils/formatJSON';
+window.jsonlint = require("jsonlint-mod");
+require("codemirror/mode/javascript/javascript");
+require("codemirror/addon/lint/lint.css");
+require("codemirror/addon/lint/lint");
+require("codemirror/addon/lint/json-lint");
 
-const Control = styled.button`
-  background: ${({ active }) => (active ? "#66beb2" : "#fff")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  outline: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  &:hover {
-    color: ${({ active }) => (active ? "#fff" : "#66beb2")};
-  }
-`;
-
-const Preview = () => {
+const Preview = ({ onClose }) => {
   const state = useDragState();
-  const tree = useMemo(() => {
-    return format(state);
+  const dispatch = useDragUpdater();
+  const json = useMemo(() => {
+    return JSON.stringify(format(state), null, "  ");
   }, [state]);
+  const [value, setValue] = useState(json);
 
-  const [width, setWidth] = useState(960);
   return (
     <div css={{ width: "100%", height: "100%" }}>
-      <div css={{ margin: "auto", textAlign: "center", padding: "12px" }}>
-        <Control active={width === 1280} onClick={() => setWidth(1280)}>
-          <Icon icon="desktop_mac" />
-        </Control>
-        <Control active={width === 960} onClick={() => setWidth(960)}>
-          <Icon icon="tablet_mac" />
-        </Control>
-        <Control active={width === 600} onClick={() => setWidth(600)}>
-          <Icon icon="phone_iphone" />
-        </Control>
-        <Control active={width === 601} onClick={() => setWidth(601)}>
-          <Icon icon="code" />
-        </Control>
-      </div>
-      <div css={{ overflow: "auto", width: "100%" }}>
-        <div
-          css={{
-            margin: "auto",
-            padding: "0 16px 32px",
-            transition: "width 200ms ease-in",
-            border: "1px solid #000",
-            width: `${width}px`
-          }}
-        >
-          {width === 601 ? (
-            <div
-              css={{
-                width: "100%",
-                padding: "16px",
-                overflow: "auto"
-              }}
-            >
-              <code css={{ padding: "12px" }}>
-                <pre>{JSON.stringify(tree, null, "  ")}</pre>
-              </code>
-            </div>
-          ) : (
-            <KitPreview layout={tree.layout} />
-          )}
+      <CodeMirror
+        value={value}
+        options={{
+          mode: { name: "javascript", json: true },
+          theme: "material",
+          lineNumbers: true,
+          smartIndent: true, // javascript mode does bad things with jsx indents
+          tabSize: 2,
+          gutters: ["CodeMirror-lint-markers"],
+          lint: true
+        }}
+        onBeforeChange={(editor, data, value) => {
+          setValue(value);
+        }}
+      />
+      <div css={{ display: "flex", justifyContent: "flex-end" }}>
+        <div css={{ padding: "12px" }}>
+          <Button buttonType="muted" onClick={onClose}>
+            Close
+          </Button>
+        </div>
+        <div css={{ padding: "12px" }}>
+          <Button
+            buttonType="positive"
+            onClick={() => {
+              try {
+                const obj = window.jsonlint.parse(value);
+                dispatch({ type: FORCE_UPDATE, payload: unformat(obj) });
+                onClose();
+              } catch (e) {
+                onClose();
+              }
+            }}
+          >
+            Save and Close
+          </Button>
         </div>
       </div>
     </div>

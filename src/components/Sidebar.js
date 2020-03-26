@@ -41,7 +41,7 @@ const Drawer = ({ depth, maxDepth, open, children }) => {
   );
 };
 
-const Sidebar = ({ onSave }) => {
+const Sidebar = ({ onSave, toggleJson }) => {
   const data = useDragState();
   const state = useDrawerState();
   const setState = useDrawerUpdater();
@@ -80,6 +80,7 @@ const Sidebar = ({ onSave }) => {
     >
       <ThemeSettings
         onSave={onSave}
+        toggleJson={toggleJson}
         onClick={() => setState({ row: null, column: null, component: null })}
       />
       <Drawer depth={1} maxDepth={maxDepth} open={!!state.row}>

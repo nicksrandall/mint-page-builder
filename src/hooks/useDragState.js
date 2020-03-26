@@ -4,6 +4,7 @@ import produce from "immer";
 
 import registry from "../utils/componentRegistery";
 
+export const FORCE_UPDATE = "FORCE_UPDATE"
 // Rows
 export const CLONE_ROW = "CLONE_ROW";
 export const ADD_ROW = "ADD_ROW";
@@ -140,6 +141,10 @@ const makeData = initialValue => {
 
 const reducer = produce((state, action) => {
   switch (action.type) {
+    case  FORCE_UPDATE: {
+      state = Object.assign({}, action.payload);
+      return;
+    }
     case ADD_ROW: {
       const rowID = uuid();
       const colID = uuid();
