@@ -125,20 +125,25 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
               {propKeys.length ? (
                 propKeys.map(name => {
                   const type = registry.getPropDisplayType(widget.name, name);
+                  const displayName = registry.getPropDisplayName(
+                    widget.name,
+                    name
+                  );
                   return (
                     <div
                       key={name}
                       css={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: "flex",
+                        alignItems: "center",
                         fontSize: "12px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis"
                       }}
                     >
-                      <strong>{name}:</strong>
-                      {` `}
+                      <div css={{ fontWeight: 700, paddingRight: "8px" }}>
+                        {displayName}:
+                      </div>
                       <Display type={type} value={widget.props[name]} />
                     </div>
                   );
@@ -167,7 +172,7 @@ const Display = ({ type, value }) => {
             color: "#000",
             border: "none",
             wordWrap: "break-word",
-            whiteSpace: 'normal',
+            whiteSpace: "normal"
           }}
           label={value}
         >
@@ -184,12 +189,18 @@ const Display = ({ type, value }) => {
             maxWidth: "300px",
             color: "#000",
             border: "none",
-            whiteSpace: 'normal',
+            whiteSpace: "normal",
             wordWrap: "break-word"
           }}
-          label={<img src={value} css={{ width: '300px' }} alt="larger thumbnail" />}
+          label={
+            <img src={value} css={{ width: "292px" }} alt="larger thumbnail" />
+          }
         >
-          <img css={{ height: "24px", display: "inline-block" }} src={value} alt="thumbnail" />
+          <img
+            css={{ height: "24px", display: "inline-block" }}
+            src={value}
+            alt="thumbnail"
+          />
         </Tooltip>
       );
     case "color":
@@ -203,7 +214,7 @@ const Display = ({ type, value }) => {
             maxWidth: "300px",
             color: "#000",
             border: "none",
-            whiteSpace: 'normal',
+            whiteSpace: "normal",
             wordWrap: "break-word"
           }}
           label={value}
