@@ -18,8 +18,9 @@ init(sdk => {
     );
     sdk.window.updateHeight();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
+    console.log('button', Button);
     ReactDOM.render(
-      <Button
+      <button
         buttonType="primary"
         icon="edit"
         onClick={() => {
@@ -33,7 +34,7 @@ init(sdk => {
         }}
       >
         Open page builder
-      </Button>,
+      </button>,
       document.getElementById("root")
     );
   }
