@@ -135,7 +135,7 @@ const App = ({ sdk, initialValue, onClose }) => {
                   css={{
                     backgroundColor: "#f8f8f8",
                     width: "100%",
-                    height: "100%",
+                    height: "100vh",
                     flexGrow: 1,
                     flexShrink: 1,
                     overflowX: "hidden"
