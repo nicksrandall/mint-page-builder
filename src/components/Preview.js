@@ -51,7 +51,14 @@ const Preview = ({ onClose }) => {
         flexDirection: "column"
       }}
     >
-      <div css={{ height: "100%", width: "100%" }}>
+      <div
+        css={{
+          height: "100%",
+          width: "100%",
+          overflowY: "auto",
+          flexShrink: 1
+        }}
+      >
         <CodeMirror
           value={value}
           options={{
@@ -69,7 +76,14 @@ const Preview = ({ onClose }) => {
           onChange={handleChange}
         />
       </div>
-      <div css={{ display: "flex", justifyContent: "flex-end" }}>
+      <div
+        css={{
+          display: "flex",
+          justifyContent: "flex-end",
+          flexShrink: 0,
+          flexGrow: 0
+        }}
+      >
         <div css={{ padding: "12px" }}>
           <Button buttonType="muted" onClick={onClose}>
             Close
