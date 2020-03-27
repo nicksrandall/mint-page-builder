@@ -142,8 +142,7 @@ const makeData = initialValue => {
 const reducer = produce((state, action) => {
   switch (action.type) {
     case  FORCE_UPDATE: {
-      state = Object.assign({}, action.payload);
-      return;
+      return action.payload;
     }
     case ADD_ROW: {
       const rowID = uuid();
