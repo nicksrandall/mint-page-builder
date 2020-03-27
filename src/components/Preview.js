@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
-// import jsonlint from "jsonlint";
+import debounce from "debounce-fn";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 
@@ -16,6 +16,7 @@ require("codemirror/addon/lint/lint");
 require("codemirror/addon/lint/json-lint");
 
 const Preview = ({ onClose }) => {
+  const [isValid, setValid] = useState(true);
   const state = useDragState();
   const dispatch = useDragUpdater();
   const json = useMemo(() => {
@@ -23,23 +24,51 @@ const Preview = ({ onClose }) => {
   }, [state]);
   const [value, setValue] = useState(json);
 
+  const handleChange = useCallback(
+    debounce(
+      (e, d, value) => {
+        // TODO: do more validation
+        // like on the whole schema
+        try {
+          window.jsonlint.parse(value);
+          setValid(true);
+        } catch {
+          setValid(false);
+        }
+      },
+      { wait: 200 }
+    ),
+    []
+  );
+
   return (
-    <div css={{ width: "100%", height: "100%" }}>
-      <CodeMirror
-        value={value}
-        options={{
-          mode: { name: "javascript", json: true },
-          theme: "material",
-          lineNumbers: true,
-          smartIndent: true, // javascript mode does bad things with jsx indents
-          tabSize: 2,
-          gutters: ["CodeMirror-lint-markers"],
-          lint: true
-        }}
-        onBeforeChange={(editor, data, value) => {
-          setValue(value);
-        }}
-      />
+    <div
+      css={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        alignItems: "stretch",
+        flexDirection: "column"
+      }}
+    >
+      <div css={{ height: "100%", width: "100%" }}>
+        <CodeMirror
+          value={value}
+          options={{
+            mode: { name: "javascript", json: true },
+            theme: "material",
+            lineNumbers: true,
+            smartIndent: true, // javascript mode does bad things with jsx indents
+            tabSize: 2,
+            gutters: ["CodeMirror-lint-markers"],
+            lint: true
+          }}
+          onBeforeChange={(editor, data, value) => {
+            setValue(value);
+          }}
+          onChange={handleChange}
+        />
+      </div>
       <div css={{ display: "flex", justifyContent: "flex-end" }}>
         <div css={{ padding: "12px" }}>
           <Button buttonType="muted" onClick={onClose}>
@@ -48,6 +77,7 @@ const Preview = ({ onClose }) => {
         </div>
         <div css={{ padding: "12px" }}>
           <Button
+            disabled={!isValid}
             buttonType="positive"
             onClick={() => {
               try {

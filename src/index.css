@@ -34,3 +34,12 @@ button {
 [data-reach-popover] {
   z-index: 10;
 }
+
+.react-codemirror2 {
+  height: 100%;
+}
+
+.react-codemirror2 .CodeMirror {
+  border: 1px solid #eee;
+  height: 100%;
+}

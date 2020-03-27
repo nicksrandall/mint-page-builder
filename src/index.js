@@ -8,7 +8,7 @@ import "@contentful/forma-36-fcss/dist/styles.css";
 import { Button, Note } from "@contentful/forma-36-react-components";
 import { init, locations } from "contentful-ui-extensions-sdk";
 
-init(sdk => {
+const bootstrap = sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
     // const sdk = {};
     ReactDOM.render(
@@ -78,4 +78,21 @@ init(sdk => {
       document.getElementById("root")
     );
   }
-});
+};
+
+if (process.env.NODE_ENV === "production") {
+  init(bootstrap);
+} else {
+  // fake sdk for local devlopement
+  const noop = () => {};
+  class Location {
+    constructor(loc) {
+      this.loc = loc;
+    }
+    is(value) {
+      return this.loc === value;
+    }
+  }
+  const location = new Location(locations.LOCATION_DIALOG);
+  bootstrap({ location, window: { updateHeight: noop } });
+}
