@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { ThemeProvider } from "theme-ui";
 import { base } from "@theme-ui/presets";
@@ -118,15 +118,22 @@ const MenuButton = () => {
   );
 };
 
-const App = ({ sdk, initialValue, onClose }) => {
+const App = ({ sdk }) => {
   const [showJSON, setShowJSON] = useState(false);
+  const value = useMemo(() => {
+    return unformat(sdk.parameters.invocation.initialValue);
+  }, [sdk.parameters.invocation.initialValue]);
+
+  const onClose = useCallback(data => sdk.close(data), [sdk]);
+  const toggleJSON = useCallback(() => setShowJSON(v => !v), []);
+
   return (
     <SDKContext.Provider value={sdk}>
       <ThemeProvider theme={base}>
-        <DragProvider sdk={sdk} initialValue={unformat(initialValue)}>
+        <DragProvider sdk={sdk} initialValue={value}>
           <DrawerProvider>
             {showJSON ? (
-              <Preview onClose={() => setShowJSON(false)} />
+              <Preview onClose={toggleJSON} />
             ) : (
               <div
                 css={{
@@ -156,10 +163,7 @@ const App = ({ sdk, initialValue, onClose }) => {
                 </Drag>
                 {/* side bar */}
                 <MenuButton />
-                <Sidebar
-                  onSave={onClose}
-                  toggleJson={() => setShowJSON(true)}
-                />
+                <Sidebar onSave={onClose} toggleJson={toggleJSON} />
               </div>
             )}
           </DrawerProvider>

@@ -10,16 +10,10 @@ import { init, locations } from "contentful-ui-extensions-sdk";
 
 const bootstrap = sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
-    // const sdk = {};
+    console.log("bootstraping dialog");
     ReactDOM.render(
       <React.StrictMode>
-        <App
-          sdk={sdk}
-          initialValue={sdk?.parameters?.invocation?.initialValue}
-          onClose={data => {
-            sdk.close(data);
-          }}
-        />
+        <App sdk={sdk} />
       </React.StrictMode>,
       document.getElementById("root")
     );
@@ -81,9 +75,11 @@ const bootstrap = sdk => {
 };
 
 if (process.env.NODE_ENV === "production") {
+  console.log('bootstrap from production');
   init(bootstrap);
 } else {
   // fake sdk for local devlopement
+  console.log('bootstrap with sample data');
   const noop = () => {};
   class Location {
     constructor(loc) {
@@ -94,5 +90,10 @@ if (process.env.NODE_ENV === "production") {
     }
   }
   const location = new Location(locations.LOCATION_DIALOG);
-  bootstrap({ location, window: { updateHeight: noop } });
+  bootstrap({
+    location,
+    close: noop,
+    window: { updateHeight: noop },
+    parameters: { invocation: { initialValue: [] } }
+  });
 }
