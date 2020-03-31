@@ -1,11 +1,13 @@
 import React, { useMemo, useState, useCallback } from "react";
 import debounce from "debounce-fn";
+import { Button } from "@contentful/forma-36-react-components";
 
-import Editor from './JSONEditor';
+import Editor from "./JSONEditor";
 import { FORCE_UPDATE } from "../hooks/useDragState";
 import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { format, unformat } from "../utils/formatJSON";
-import { Button } from "@contentful/forma-36-react-components";
+import schema from "../utils/layoutSchema";
+import { useSDK } from "../contexts/ContentfulSDK";
 
 const Preview = ({ onClose }) => {
   const [isValid, setValid] = useState(true);
@@ -15,6 +17,7 @@ const Preview = ({ onClose }) => {
     return JSON.stringify(format(state), null, "  ");
   }, [state]);
   const [value, setValue] = useState(json);
+  const sdk = useSDK();
 
   const handleChange = useCallback(
     debounce(
@@ -22,7 +25,7 @@ const Preview = ({ onClose }) => {
         // TODO: do more validation
         // like on the whole schema
         try {
-         window.jsonlint.parse(value);
+          window.jsonlint.parse(value);
           setValid(true);
         } catch {
           setValid(false);
@@ -79,10 +82,22 @@ const Preview = ({ onClose }) => {
             onClick={() => {
               try {
                 const obj = window.jsonlint.parse(value);
-                dispatch({ type: FORCE_UPDATE, payload: unformat(obj) });
-                onClose();
+                schema
+                  .validate(obj)
+                  .then(validData => {
+                    dispatch({
+                      type: FORCE_UPDATE,
+                      payload: unformat(validData)
+                    });
+                    onClose();
+                  })
+                  .catch(err => {
+                    sdk.notifier.error(
+                      `Invalid JSON: ${err.errors.join(", ")}`
+                    );
+                  });
               } catch (e) {
-                onClose();
+                sdk.notifier.error("Invalid JSON - fix it before saving.");
               }
             }}
           >
