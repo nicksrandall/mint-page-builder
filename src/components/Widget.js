@@ -8,7 +8,7 @@ import { DELETE_WIDGET, CLONE_WIDGET } from "../hooks/useDragState";
 import Icon from "./Icon";
 import { useDragUpdater } from "../contexts/DragContext";
 import { useDrawerState, useDrawerUpdater } from "../contexts/DrawerContext";
-import registry from "../utils/componentRegistery";
+import { useRegistry } from "../contexts/RegistryContext";
 
 const HeaderControl = styled.button({
   color: "inherit",
@@ -26,6 +26,8 @@ const Widget = React.memo(({ rowID, columnID, widget, index }) => {
   const propKeys = useMemo(() => Object.keys(widget.props).sort(), [
     widget.props
   ]);
+
+  const registry = useRegistry();
 
   return (
     <Draggable draggableId={widget.id} index={index}>

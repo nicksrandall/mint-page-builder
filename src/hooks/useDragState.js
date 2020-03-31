@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import uuid from "@lukeed/uuid";
 import produce from "immer";
 
-import registry from "../utils/componentRegistery";
+import {useRegistry} from '../contexts/RegistryContext';
 
 export const FORCE_UPDATE = "FORCE_UPDATE"
 // Rows
@@ -139,7 +139,7 @@ const makeData = initialValue => {
   };
 };
 
-const reducer = produce((state, action) => {
+const makeReducer = (registry) => produce((state, action) => {
   switch (action.type) {
     case  FORCE_UPDATE: {
       return action.payload;
@@ -364,7 +364,8 @@ const reducer = produce((state, action) => {
 });
 
 const useDragState = initialValue => {
-  return useReducer(reducer, initialValue, makeData);
+  const registry = useRegistry();
+  return useReducer(makeReducer(registry), initialValue, makeData);
 };
 
 export default useDragState;

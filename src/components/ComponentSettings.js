@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
-import registry from "../utils/componentRegistery";
 
+import { useRegistry } from "../contexts/RegistryContext";
 import { SectionHeading } from "./DrawerUtils";
 import Prop from "./Prop";
 
 const handleSubmit = e => e.preventDefault();
 const ComponentProps = ({ name, uuid }) => {
-  const spec = useMemo(() => registry.getDefinition(name), [name]);
+  const registry = useRegistry();
+  const spec = useMemo(() => registry.getDefinition(name), [name, registry]);
   return (
     <form action="" onSubmit={handleSubmit}>
       {spec.props.map(prop => {

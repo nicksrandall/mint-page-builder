@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
 // import * as serviceWorker from './serviceWorker';
 import "@contentful/forma-36-react-components/dist/styles.css";
 import "@contentful/forma-36-fcss/dist/styles.css";
-import { Button, Note } from "@contentful/forma-36-react-components";
+import { Button } from "@contentful/forma-36-react-components";
 import { init, locations } from "contentful-ui-extensions-sdk";
+
+import "./index.css";
+import App from "./App";
+import AppConfigure from "./components/AppConfigure";
 
 const bootstrap = sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
@@ -20,7 +22,6 @@ const bootstrap = sdk => {
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
     sdk.app.onConfigure(() => {
-      console.log("on configure");
       return {
         parameters: { components: [] },
         targetState: {
@@ -32,17 +33,12 @@ const bootstrap = sdk => {
         }
       };
     });
-    console.log("rendering", sdk);
     ReactDOM.render(
       <React.StrictMode>
-        <Note>Someday, component configuration will go here</Note>
+        <AppConfigure sdk={sdk} />
       </React.StrictMode>,
       document.getElementById("root")
     );
-    window.setTimeout(() => {
-      console.log("set ready");
-      sdk.app.setReady();
-    }, 50);
     sdk.window.startAutoResizer();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
@@ -96,11 +92,19 @@ if (process.env.NODE_ENV === "production") {
       return this.loc === value;
     }
   }
-  const location = new Location(locations.LOCATION_DIALOG);
+  const location = new Location(locations.LOCATION_APP_CONFIG);
   bootstrap({
+    app: {
+      onConfigure: noop,
+      setReady: noop,
+      getParameters: () =>
+        Promise.resolve({
+          components: []
+        })
+    },
     location,
     close: noop,
-    window: { updateHeight: noop },
+    window: { updateHeight: noop, startAutoResizer: noop },
     parameters: { invocation: { initialValue: [] } }
   });
 }

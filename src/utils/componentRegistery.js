@@ -44,6 +44,7 @@ class Registery {
   }
 }
 
+/*
 const registry = new Registery();
 
 registry.register({
@@ -168,8 +169,6 @@ registry.register({
   icon: "horizontal_split",
   props: []
 });
+*/
 
-console.log("type", registry.getPropDisplayType("Image", "src"));
-console.log("name", registry.getPropDisplayName("Image", "src"));
-
-export default registry;
+export default Registery;

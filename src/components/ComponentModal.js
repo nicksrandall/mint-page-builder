@@ -5,8 +5,8 @@ import VisuallyHidden from "@reach/visually-hidden";
 // reach base styles
 import "@reach/dialog/styles.css";
 
+import { useRegistry } from "../contexts/RegistryContext";
 import Icon from "./Icon";
-import registry from "../utils/componentRegistery";
 import mq from "../utils/mediaQueries";
 
 const Tile = ({ icon, name, onClick }) => {
@@ -33,6 +33,7 @@ const Tile = ({ icon, name, onClick }) => {
 };
 
 const Modal = ({ isOpen, close, onSelectComponent }) => {
+  const registry = useRegistry();
   return (
     <Dialog
       css={{

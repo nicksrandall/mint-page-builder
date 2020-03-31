@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from "react";
+import React, { Suspense, useMemo, useCallback, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { ThemeProvider } from "theme-ui";
 import { base } from "@theme-ui/presets";
@@ -21,7 +21,9 @@ import Icon from "./components/Icon";
 import mq from "./utils/mediaQueries";
 import { unformat } from "./utils/formatJSON";
 import { SDKContext } from "./contexts/ContentfulSDK";
-import Preview from "./components/Preview";
+import { RegistryContext } from "./contexts/RegistryContext";
+
+const Preview = React.lazy(() => import("./components/Preview"));
 
 const Rows = () => {
   const state = useDragState();
@@ -118,7 +120,7 @@ const MenuButton = () => {
   );
 };
 
-const App = ({ sdk }) => {
+const App = ({ sdk, registry }) => {
   const [showJSON, setShowJSON] = useState(false);
   const value = useMemo(() => {
     return unformat(sdk.parameters.invocation.initialValue);
@@ -128,48 +130,52 @@ const App = ({ sdk }) => {
   const toggleJSON = useCallback(() => setShowJSON(v => !v), []);
 
   return (
-    <SDKContext.Provider value={sdk}>
-      <ThemeProvider theme={base}>
-        <DragProvider sdk={sdk} initialValue={value}>
-          <DrawerProvider>
-            {showJSON ? (
-              <Preview onClose={toggleJSON} />
-            ) : (
-              <div
-                css={{
-                  display: "flex",
-                  height: "100%",
-                  overflow: "hidden",
-                  position: "relative"
-                }}
-              >
-                {/* content area */}
-                <Drag>
-                  <div
-                    css={{
-                      backgroundColor: "#f8f8f8",
-                      width: "100%",
-                      height: "100vh",
-                      flexGrow: 1,
-                      flexShrink: 1,
-                      overflowX: "hidden"
-                    }}
-                  >
-                    <div css={{ padding: "16px" }}>
-                      <Rows />
-                      <AddMore />
+    <RegistryContext.Provider value={registry}>
+      <SDKContext.Provider value={sdk}>
+        <ThemeProvider theme={base}>
+          <DragProvider sdk={sdk} initialValue={value}>
+            <DrawerProvider>
+              {showJSON ? (
+                <Suspense fallback={<div>loading...</div>}>
+                  <Preview onClose={toggleJSON} />
+                </Suspense>
+              ) : (
+                <div
+                  css={{
+                    display: "flex",
+                    height: "100%",
+                    overflow: "hidden",
+                    position: "relative"
+                  }}
+                >
+                  {/* content area */}
+                  <Drag>
+                    <div
+                      css={{
+                        backgroundColor: "#f8f8f8",
+                        width: "100%",
+                        height: "100vh",
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        overflowX: "hidden"
+                      }}
+                    >
+                      <div css={{ padding: "16px" }}>
+                        <Rows />
+                        <AddMore />
+                      </div>
                     </div>
-                  </div>
-                </Drag>
-                {/* side bar */}
-                <MenuButton />
-                <Sidebar onSave={onClose} toggleJson={toggleJSON} />
-              </div>
-            )}
-          </DrawerProvider>
-        </DragProvider>
-      </ThemeProvider>
-    </SDKContext.Provider>
+                  </Drag>
+                  {/* side bar */}
+                  <MenuButton />
+                  <Sidebar onSave={onClose} toggleJson={toggleJSON} />
+                </div>
+              )}
+            </DrawerProvider>
+          </DragProvider>
+        </ThemeProvider>
+      </SDKContext.Provider>
+    </RegistryContext.Provider>
   );
 };
 
