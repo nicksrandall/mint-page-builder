@@ -173,6 +173,7 @@ const Typography = ({ value = {}, onChange }) => {
 
 const Entry = ({ value, contentTypes, onChange }) => {
   const sdk = useSDK();
+  console.log('sdk', sdk);
   return (
     <>
       {value ? <div>{value}</div> : <div>No Entry Selected</div>}
@@ -184,7 +185,7 @@ const Entry = ({ value, contentTypes, onChange }) => {
             })
             .then(data => {
               console.log("data", data);
-              onChange(data?.fields?.name);
+              onChange(data?.fields?.name['en-US']);
             });
         }}
       >
