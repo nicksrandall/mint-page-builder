@@ -8,8 +8,8 @@ import { init, locations } from "contentful-ui-extensions-sdk";
 import "./index.css";
 import App from "./App";
 import AppConfigure from "./components/AppConfigure";
-import FieldView from './components/FieldView';
-import Registery from './utils/componentRegistery';
+import FieldView from "./components/FieldView";
+import Registery from "./utils/componentRegistery";
 
 const bootstrap = sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
@@ -58,7 +58,7 @@ if (process.env.NODE_ENV === "production") {
       return this.loc === value;
     }
   }
-  const location = new Location(locations.LOCATION_APP_CONFIG);
+  const location = new Location(locations.LOCATION_DIALOG);
   bootstrap({
     app: {
       onConfigure: noop,
@@ -70,7 +70,8 @@ if (process.env.NODE_ENV === "production") {
     },
     location,
     close: noop,
+    notifier: { error: noop },
     window: { updateHeight: noop, startAutoResizer: noop },
-    parameters: { invocation: { initialValue: [] } }
+    parameters: { invocation: { initialValue: [] }, installation: { components: [] } }
   });
 }

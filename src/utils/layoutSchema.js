@@ -1,4 +1,4 @@
-import { array, string, object, lazy } from "yup"; // for only what you need
+import { array, string, object, lazy } from "yup";
 
 const node = object()
   .shape({
@@ -6,11 +6,13 @@ const node = object()
     name: string().required(),
     props: object().nullable(),
     children: lazy(value =>
-      value && Array.isArray(value) ? array.of(node) : node.default(undefined)
+      Array.isArray(value) ? schema : node.default(undefined)
     )
   })
   .noUnknown();
 
-const schema = array().of(node);
+const schema = array()
+  .of(node)
+  .ensure();
 
 export default schema;

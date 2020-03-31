@@ -72,7 +72,7 @@ const Preview = ({ onClose }) => {
       >
         <div css={{ padding: "12px" }}>
           <Button buttonType="muted" onClick={onClose}>
-            Close
+            Exit
           </Button>
         </div>
         <div css={{ padding: "12px" }}>
@@ -81,7 +81,7 @@ const Preview = ({ onClose }) => {
             buttonType="positive"
             onClick={() => {
               try {
-                const obj = window.jsonlint.parse(value);
+                const obj = JSON.parse(value);
                 schema
                   .validate(obj)
                   .then(validData => {
@@ -92,16 +92,18 @@ const Preview = ({ onClose }) => {
                     onClose();
                   })
                   .catch(err => {
+                    console.log("catch err", err);
                     sdk.notifier.error(
                       `Invalid JSON: ${err.errors.join(", ")}`
                     );
                   });
-              } catch (e) {
+              } catch (err) {
+                console.log("parse err", err);
                 sdk.notifier.error("Invalid JSON - fix it before saving.");
               }
             }}
           >
-            Save and Close
+            Save and Exit
           </Button>
         </div>
       </div>
