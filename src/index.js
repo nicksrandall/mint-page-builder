@@ -9,30 +9,23 @@ import { init, locations } from "contentful-ui-extensions-sdk";
 import "./index.css";
 import App from "./App";
 import AppConfigure from "./components/AppConfigure";
+import Registery from './utils/componentRegistery';
 
 const bootstrap = sdk => {
   if (sdk.location.is(locations.LOCATION_DIALOG)) {
     console.log("bootstraping dialog");
+    const registry = new Registery();
+    sdk.parameters.installation.components.forEach(definition =>
+      registry.register(definition)
+    );
     ReactDOM.render(
       <React.StrictMode>
-        <App sdk={sdk} />
+        <App sdk={sdk} registry={registry} />
       </React.StrictMode>,
       document.getElementById("root")
     );
     sdk.window.updateHeight(960);
   } else if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
-    sdk.app.onConfigure(() => {
-      return {
-        parameters: { components: [] },
-        targetState: {
-          EditorInterface: {
-            page: {
-              controls: [{ fieldId: "layout" }]
-            }
-          }
-        }
-      };
-    });
     ReactDOM.render(
       <React.StrictMode>
         <AppConfigure sdk={sdk} />
