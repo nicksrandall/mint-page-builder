@@ -10,7 +10,7 @@ const columnSpec = {
       name: "mobileSpan",
       displayName: "Mobile Span",
       type: "select",
-      values: [
+      options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
         { label: "3 Column", value: 3 },
@@ -21,7 +21,7 @@ const columnSpec = {
       name: "tabletSpan",
       displayName: "Tablet Span",
       type: "select",
-      values: [
+      options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
         { label: "3 Column", value: 3 },
@@ -36,7 +36,7 @@ const columnSpec = {
       name: "desktopSpan",
       displayName: "Desktop Span",
       type: "select",
-      values: [
+      options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
         { label: "3 Column", value: 3 },
