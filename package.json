@@ -47,7 +47,8 @@
     "slate-html-serializer": "^0.8.11",
     "slate-hyperscript": "^0.57.1",
     "slate-react": "^0.57.1",
-    "theme-ui": "^0.3.1"
+    "theme-ui": "^0.3.1",
+    "yup": "^0.28.3"
   },
   "scripts": {
     "predeploy": "npm run build",

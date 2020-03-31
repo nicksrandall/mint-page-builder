@@ -1,7 +1,43 @@
 import React, { Component, Suspense } from "react";
 import { Note } from "@contentful/forma-36-react-components";
 
+import { array, string, object, mixed } from "yup"; // for only what you need
+
 const Editor = React.lazy(() => import("./JSONEditor"));
+
+const schema = array().of(
+  object().shape({
+    name: string().required(),
+    icon: string().required(),
+    props: array().of(
+      object().shape({
+        name: string().required(),
+        type: string()
+          .oneOf([
+            "text",
+            "url",
+            "color",
+            "select",
+            "media",
+            "range",
+            "box-model",
+            "checkbox",
+            "WYSIWYG",
+            "typography"
+          ])
+          .required(),
+        displayName: string().required(),
+        displayType: string()
+          .oneOf(["text", "json", "image", "color"])
+          .required(),
+        defaultValue: mixed()
+          .required()
+          .nullable(),
+        options: mixed().nullable()
+      })
+    )
+  })
+);
 
 class AppConfigure extends Component {
   constructor(props) {
@@ -21,13 +57,15 @@ class AppConfigure extends Component {
     });
   }
   onConfigure() {
+    // TODO: do more validation
+    // like on the whole schema
     try {
       console.log("value", this.state.value);
-      const components = window.jsonlint.parse(this.state.value);
-      if (!Array.isArray(components)) {
-        this.props.sdk.notifier.error(
-          "JSON must be an array - fix it before installing."
-        );
+      let components = window.jsonlint.parse(this.state.value);
+      try {
+        components = schema.validateSync(components);
+      } catch (err) {
+        this.props.sdk.notifier.error(`Invalid JSON: ${err.errors.join(", ")}`);
         return false;
       }
       return {
@@ -50,7 +88,7 @@ class AppConfigure extends Component {
   };
   render() {
     return (
-      <div css={{ height: "100vh", overflow: 'hidden' }}>
+      <div css={{ height: "100vh", overflow: "hidden" }}>
         <div
           css={{
             flexShrink: 0,
@@ -58,9 +96,9 @@ class AppConfigure extends Component {
           }}
         >
           <Note>
-            This is the global registry of the components that we make
-            available to our page builder. Right now it's represented as JSON
-            but we could slap a UI on this if felt like that would be better.
+            This is the global registry of the components that we make available
+            to our page builder. Right now it's represented as JSON but we could
+            slap a UI on this if felt like that would be better.
           </Note>
         </div>
         <div

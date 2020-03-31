@@ -53,7 +53,7 @@ const Preview = ({ onClose }) => {
       >
         <Editor
           value={value}
-          onBeforeChange={(editor, data, value) => {
+          onBeforeChange={(_editor, _data, value) => {
             setValue(value);
           }}
           onChange={handleChange}
