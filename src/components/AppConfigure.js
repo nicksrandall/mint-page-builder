@@ -32,7 +32,6 @@ const schema = array().of(
           .oneOf(["text", "json", "image", "color"])
           .required(),
         defaultValue: mixed()
-          .required()
           .nullable(),
         options: mixed().nullable()
       })

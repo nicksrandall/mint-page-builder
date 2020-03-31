@@ -183,6 +183,7 @@ const Entry = ({ value, contentTypes, onChange }) => {
               contentTypes: contentTypes
             })
             .then(data => {
+              console.log("data", data);
               onChange(data?.fields?.name);
             });
         }}
@@ -223,7 +224,6 @@ const Media = ({ value, onChange }) => {
       <Button
         onClick={() => {
           sdk.dialogs.selectSingleAsset().then(data => {
-            console.log("data", data);
             onChange(data?.fields?.file["en-US"].url);
           });
         }}
@@ -308,7 +308,6 @@ export const PropView = React.memo(props => {
         </PropContainer>
       );
     case "select":
-      console.log("definition", definition);
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
@@ -363,14 +362,14 @@ export const PropView = React.memo(props => {
           <Entry
             value={value}
             contentTypes={definition.options}
-            onChange={url => {
+            onChange={value => {
               dispatch({
                 type: action,
                 payload: {
                   id: uuid,
                   mapKey: mapKey,
                   name: definition.name,
-                  value: url
+                  value: value
                 }
               });
             }}
