@@ -19,6 +19,7 @@ const schema = array().of(
             "color",
             "select",
             "media",
+            "entry",
             "range",
             "box-model",
             "checkbox",

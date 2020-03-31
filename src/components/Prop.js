@@ -171,6 +171,28 @@ const Typography = ({ value = {}, onChange }) => {
   );
 };
 
+const Entry = ({ value, contentTypes, onChange }) => {
+  const sdk = useSDK();
+  return (
+    <>
+      {value ? <div>{value}</div> : <div>No Entry Selected</div>}
+      <Button
+        onClick={() => {
+          sdk.dialogs
+            .selectSingleEntry({
+              contentTypes: contentTypes
+            })
+            .then(data => {
+              onChange(data?.fields?.name);
+            });
+        }}
+      >
+        Select Entry
+      </Button>
+    </>
+  );
+};
+
 const Media = ({ value, onChange }) => {
   const sdk = useSDK();
   return (
@@ -286,7 +308,7 @@ export const PropView = React.memo(props => {
         </PropContainer>
       );
     case "select":
-      console.log('definition', definition);
+      console.log("definition", definition);
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
@@ -320,6 +342,27 @@ export const PropView = React.memo(props => {
           <Label>{definition.displayName}</Label>
           <Media
             value={value}
+            onChange={url => {
+              dispatch({
+                type: action,
+                payload: {
+                  id: uuid,
+                  mapKey: mapKey,
+                  name: definition.name,
+                  value: url
+                }
+              });
+            }}
+          />
+        </PropContainer>
+      );
+    case "entry":
+      return (
+        <PropContainer>
+          <Label>{definition.displayName}</Label>
+          <Entry
+            value={value}
+            contentTypes={definition.options}
             onChange={url => {
               dispatch({
                 type: action,
