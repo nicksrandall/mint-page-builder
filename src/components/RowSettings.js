@@ -12,6 +12,11 @@ const rowSpec = {
       type: "media"
     },
     {
+      name: "color",
+      displayName: "Text Color",
+      type: "color"
+    },
+    {
       name: "backgroundColor",
       displayName: "Background Color",
       type: "color"
