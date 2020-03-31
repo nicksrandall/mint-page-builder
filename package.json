@@ -53,9 +53,9 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "cross-env NODE_ENV=development react-app-rewired start",
-    "build": "cross-env NODE_ENV=production react-app-rewired build",
-    "test": "cross-env NODE_ENV=test react-app-rewired test",
+    "start": "cross-env NODE_ENV=development CI=false react-app-rewired start",
+    "build": "cross-env NODE_ENV=production CI=false react-app-rewired build",
+    "test": "cross-env NODE_ENV=test CI=false react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
