@@ -88,7 +88,14 @@ class AppConfigure extends Component {
   };
   render() {
     return (
-      <div css={{ height: "100vh", overflow: "hidden" }}>
+      <div
+        css={{
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
         <div
           css={{
             flexShrink: 0,
