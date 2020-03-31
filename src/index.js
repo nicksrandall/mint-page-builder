@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 // import * as serviceWorker from './serviceWorker';
 import "@contentful/forma-36-react-components/dist/styles.css";
 import "@contentful/forma-36-fcss/dist/styles.css";
-import { Button } from "@contentful/forma-36-react-components";
 import { init, locations } from "contentful-ui-extensions-sdk";
 
 import "./index.css";
 import App from "./App";
 import AppConfigure from "./components/AppConfigure";
+import FieldView from './components/FieldView';
 import Registery from './utils/componentRegistery';
 
 const bootstrap = sdk => {
@@ -35,36 +35,9 @@ const bootstrap = sdk => {
     sdk.window.startAutoResizer();
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
     ReactDOM.render(
-      <>
-        <p>
-          Click the button below to use the page building tool to configure this
-          page's layout and components. This experience is completely custom and
-          can be adapted to be whatever we want.
-        </p>
-        <Button
-          buttonType="primary"
-          icon="Edit"
-          size="large"
-          onClick={() => {
-            sdk.dialogs
-              .openCurrentApp({
-                title: "Page Builder",
-                width: "fullWidth",
-                minHeight: "960px",
-                shouldCloseOnOverlayClick: true,
-                parameters: { initialValue: sdk.field.getValue() }
-              })
-              .then(data => {
-                console.log("set field", data);
-                if (data) {
-                  return sdk.field.setValue(data);
-                }
-              });
-          }}
-        >
-          Open page builder
-        </Button>
-      </>,
+      <React.StrictMode>
+        <FieldView sdk={sdk} />
+      </React.StrictMode>,
       document.getElementById("root")
     );
   }

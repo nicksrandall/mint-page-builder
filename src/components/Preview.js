@@ -22,7 +22,7 @@ const Preview = ({ onClose }) => {
         // TODO: do more validation
         // like on the whole schema
         try {
-          window.jsonlint.parse(value);
+         window.jsonlint.parse(value);
           setValid(true);
         } catch {
           setValid(false);

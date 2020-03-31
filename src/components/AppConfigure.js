@@ -36,7 +36,7 @@ const schema = array().of(
         options: mixed().nullable()
       })
     )
-  })
+  }).noUnknown()
 );
 
 class AppConfigure extends Component {
@@ -105,7 +105,7 @@ class AppConfigure extends Component {
           <Note>
             This is the global registry of the components that we make available
             to our page builder. Right now it's represented as JSON but we could
-            slap a UI on this if felt like that would be better.
+            slap a UI on this if that would be better.
           </Note>
         </div>
         <div
