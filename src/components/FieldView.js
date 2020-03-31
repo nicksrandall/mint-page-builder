@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@contentful/forma-36-react-components";
-import schema from '../utils/layoutSchema';
+import schema from "../utils/layoutSchema";
 
 const FieldView = ({ sdk }) => {
   return (
@@ -21,7 +21,10 @@ const FieldView = ({ sdk }) => {
               width: "fullWidth",
               minHeight: "960px",
               shouldCloseOnOverlayClick: true,
-              parameters: { initialValue: sdk.field.getValue() }
+              parameters: {
+                initialValue: sdk.field.getValue(),
+                locale: sdk.field.locale
+              }
             })
             .then(data => {
               console.log("set field", data);

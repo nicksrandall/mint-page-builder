@@ -14,6 +14,19 @@ import { UPDATE_PROP } from "../hooks/useDragState";
 import WYSIWYG from "./Wysiwyg";
 import { useSDK } from "../contexts/ContentfulSDK";
 
+const resolveValue = (values, currentLocale, sdk) => {
+  if (!values) {
+    return null;
+  } else if (currentLocale in values) {
+    return values[currentLocale];
+  } else if (sdk.locales.fallbacks[currentLocale] in values) {
+    const fallback = sdk.locales.fallbacks[currentLocale];
+    return values[fallback];
+  } else {
+    return values[sdk.locales.default];
+  }
+};
+
 const debounce = (callback, options) => {
   const debounced = debounceFn(callback, options);
   return e => {
@@ -174,6 +187,7 @@ const Typography = ({ value = {}, onChange }) => {
 const Entry = ({ value, contentTypes, onChange }) => {
   const sdk = useSDK();
   console.log('sdk', sdk);
+  const currentLocale = sdk.parameters.invocation.locale;
   return (
     <>
       {value ? <div>{value}</div> : <div>No Entry Selected</div>}
@@ -185,7 +199,7 @@ const Entry = ({ value, contentTypes, onChange }) => {
             })
             .then(data => {
               console.log("data", data);
-              onChange(data?.fields?.name['en-US']);
+              onChange(resolveValue(data?.fields?.name, currentLocale, sdk));
             });
         }}
       >
@@ -197,6 +211,7 @@ const Entry = ({ value, contentTypes, onChange }) => {
 
 const Media = ({ value, onChange }) => {
   const sdk = useSDK();
+  const currentLocale = sdk.parameters.invocation.locale;
   return (
     <>
       {value ? (
@@ -225,7 +240,7 @@ const Media = ({ value, onChange }) => {
       <Button
         onClick={() => {
           sdk.dialogs.selectSingleAsset().then(data => {
-            onChange(data?.fields?.file["en-US"].url);
+            onChange(resolveValue(data?.fields?.file, currentLocale, sdk).url);
           });
         }}
       >
