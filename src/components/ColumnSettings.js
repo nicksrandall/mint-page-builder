@@ -6,8 +6,7 @@ import Prop from "./Prop";
 const columnSpec = {
   name: "Column",
   props: [
-    {
-      name: "mobileSpan",
+    { name: "mobileSpan",
       displayName: "Mobile Span",
       type: "select",
       options: [

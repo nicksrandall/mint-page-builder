@@ -286,6 +286,7 @@ export const PropView = React.memo(props => {
         </PropContainer>
       );
     case "select":
+      console.log('definition', definition);
       return (
         <PropContainer>
           <Label>{definition.displayName}</Label>
