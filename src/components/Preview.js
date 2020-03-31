@@ -47,7 +47,7 @@ const Preview = ({ onClose }) => {
         css={{
           height: "100%",
           width: "100%",
-          overflowY: "auto",
+          overflow: "auto",
           flexShrink: 1
         }}
       >

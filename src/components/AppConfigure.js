@@ -1,4 +1,5 @@
 import React, { Component, Suspense } from "react";
+import { Note } from "@contentful/forma-36-react-components";
 
 const Editor = React.lazy(() => import("./JSONEditor"));
 
@@ -49,24 +50,24 @@ class AppConfigure extends Component {
   };
   render() {
     return (
-      <div css={{ height: "100vh", overflow: "auto" }}>
+      <div css={{ height: "100vh", overflow: 'hidden' }}>
         <div
           css={{
             flexShrink: 0,
             flexGrow: 0
           }}
         >
-          <p>
+          <Note>
             This is the global registry of the components that we make
             available to our page builder. Right now it's represented as JSON
             but we could slap a UI on this if felt like that would be better.
-          </p>
+          </Note>
         </div>
         <div
           css={{
             height: "100%",
             width: "100%",
-            overflowY: "auto",
+            overflow: "auto",
             flexShrink: 1
           }}
         >
