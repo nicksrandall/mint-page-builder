@@ -303,7 +303,7 @@ export const PropView = React.memo(props => {
               })
             }
           >
-            {definition.values.map(option => {
+            {definition.options.map(option => {
               return (
                 <option key={option.value} value={option.value}>
                   {option.label}
