@@ -49,11 +49,35 @@ class AppConfigure extends Component {
   };
   render() {
     return (
-      <Suspense fallback={<div>loading...</div>}>
-        <div css={{ height: "100vh", overflow: "auto" }}>
-          <Editor value={this.state.value} onBeforeChange={this.handleChange} />
+      <div css={{ height: "100vh", overflow: "auto" }}>
+        <div
+          css={{
+            flexShrink: 0,
+            flexGrow: 0
+          }}
+        >
+          <p>
+            This is the global registry of the components that we make
+            available to our page builder. Right now it's represented as JSON
+            but we could slap a UI on this if felt like that would be better.
+          </p>
         </div>
-      </Suspense>
+        <div
+          css={{
+            height: "100%",
+            width: "100%",
+            overflowY: "auto",
+            flexShrink: 1
+          }}
+        >
+          <Suspense fallback={<div>loading...</div>}>
+            <Editor
+              value={this.state.value}
+              onBeforeChange={this.handleChange}
+            />
+          </Suspense>
+        </div>
+      </div>
     );
   }
 }
