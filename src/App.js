@@ -7,7 +7,8 @@ import {
   ADD_ROW,
   REORDER_ROW,
   REORDER_WIDGET,
-  REORDER_COLUMN
+  REORDER_COLUMN,
+  REORDER_SUB_WIDGET
 } from "./hooks/useDragState";
 import Sidebar from "./components/Sidebar";
 import Row from "./components/Row";
@@ -92,6 +93,10 @@ const Drag = ({ children }) => {
       if (result.type === "WIDGET") {
         dispatch({ type: REORDER_WIDGET, payload: result });
       }
+
+      if (result.type === "SUB_WIDGET") {
+        dispatch({ type: REORDER_SUB_WIDGET, payload: result });
+      }
     },
     [dispatch]
   );
@@ -140,16 +145,16 @@ const App = ({ sdk, registry }) => {
                   <Preview onClose={toggleJSON} />
                 </Suspense>
               ) : (
-                <div
-                  css={{
-                    display: "flex",
-                    height: "100%",
-                    overflow: "hidden",
-                    position: "relative"
-                  }}
-                >
-                  {/* content area */}
-                  <Drag>
+                <Drag>
+                  <div
+                    css={{
+                      display: "flex",
+                      height: "100%",
+                      overflow: "hidden",
+                      position: "relative"
+                    }}
+                  >
+                    {/* content area */}
                     <div
                       css={{
                         backgroundColor: "#f8f8f8",
@@ -165,11 +170,11 @@ const App = ({ sdk, registry }) => {
                         <AddMore />
                       </div>
                     </div>
-                  </Drag>
-                  {/* side bar */}
-                  <MenuButton />
-                  <Sidebar onSave={onClose} toggleJson={toggleJSON} />
-                </div>
+                    {/* side bar */}
+                    <MenuButton />
+                    <Sidebar onSave={onClose} toggleJson={toggleJSON} />
+                  </div>
+                </Drag>
               )}
             </DrawerProvider>
           </DragProvider>

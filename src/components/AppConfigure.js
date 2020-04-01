@@ -29,7 +29,7 @@ const schema = array().of(
           .required(),
         displayName: string().required(),
         displayType: string()
-          .oneOf(["text", "json", "image", "color"])
+          .oneOf(["boolean", "text", "json", "image", "color"])
           .required(),
         defaultValue: mixed()
           .nullable(),

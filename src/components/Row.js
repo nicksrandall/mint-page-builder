@@ -66,7 +66,8 @@ const Row = React.memo(({ row, index }) => {
                         open: true,
                         row: row.id,
                         column: null,
-                        component: null
+                        component: null,
+                        subComponent: null,
                       })
                     }
                   >

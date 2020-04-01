@@ -100,6 +100,9 @@ const Sidebar = ({ onSave, toggleJson }) => {
       <Drawer depth={3} maxDepth={maxDepth} open={!!state.component}>
         <ComponentSettings component={data.componentMap[state.component]} />
       </Drawer>
+      <Drawer depth={4} maxDepth={maxDepth} open={!!state.subComponent}>
+        <ComponentSettings component={data.subComponentMap[state.subComponent]} subComponent />
+      </Drawer>
     </div>
   );
 };

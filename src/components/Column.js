@@ -6,7 +6,7 @@ import uuid from "@lukeed/uuid";
 import ComponentModal from "./ComponentModal";
 import Icon from "./Icon";
 import { ADD_WIDGET, DELETE_COLUMN, CLONE_COLUMN } from "../hooks/useDragState";
-import Widget from "./Widget";
+import Widget from "./Component";
 import {useDragState, useDragUpdater} from "../contexts/DragContext";
 import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";
 
@@ -95,7 +95,8 @@ const Column = React.memo(({ rowID, column, index }) => {
                           open: true,
                           row: rowID,
                           column: column.id,
-                          component: null
+                          component: null,
+                          subComponent: null,
                         })
                       }
                     >
@@ -132,7 +133,8 @@ const Column = React.memo(({ rowID, column, index }) => {
                           open: true,
                           row: rowID,
                           column: column.id,
-                          component: null
+                          component: null,
+                          subComponent: null,
                         })
                       }
                     >
@@ -237,7 +239,8 @@ const Column = React.memo(({ rowID, column, index }) => {
                       setDrawerState({
                         row: rowID,
                         column: column.id,
-                        component: id
+                        component: id,
+                        subComponent: null,
                       });
                     }}
                   />

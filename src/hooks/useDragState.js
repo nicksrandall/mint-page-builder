@@ -23,8 +23,15 @@ export const ADD_WIDGET = "ADD_WIDGET";
 export const DELETE_WIDGET = "DELETE_WIDGET";
 export const CLONE_WIDGET = "CLONE_WIDGET";
 
+// Sub-widgets
+export const REORDER_SUB_WIDGET = "REORDER_SUB_WIDGET";
+export const ADD_SUB_WIDGET = "ADD_SUB_WIDGET";
+export const DELETE_SUB_WIDGET = "DELETE_SUB_WIDGET";
+export const CLONE_SUB_WIDGET = "CLONE_SUB_WIDGET";
+
 // Props
 export const UPDATE_PROP = "UPDATE_PROP";
+export const UPDATE_SUB_PROP = "UPDATE_SUB_PROP";
 
 // Theme
 export const UPDATE_THEME = "UPDATE_THEME";
@@ -115,7 +122,7 @@ const makeData = initialValue => {
           level: "h1",
           content: "Hello world"
         },
-        hasChildren: false
+        children: [],
       },
       [comp2]: {
         id: comp2,
@@ -124,7 +131,7 @@ const makeData = initialValue => {
           src: "https://source.unsplash.com/random",
           alt: "fake image"
         },
-        hasChildren: false
+        children: [],
       },
       [comp3]: {
         id: comp3,
@@ -132,7 +139,7 @@ const makeData = initialValue => {
         props: {
           content: `<h1>Hello world</h1>`
         },
-        hasChildren: false
+        children: [],
       }
     },
     ordered: [row1, row2]
@@ -279,6 +286,11 @@ const makeReducer = (registry) => produce((state, action) => {
       state[payload.mapKey][payload.id].props[payload.name] = payload.value;
       return;
     }
+    case UPDATE_SUB_PROP: {
+      const payload = action.payload;
+      state[payload.mapKey][payload.id].children[payload.index].props[payload.name] = payload.value;
+      return;
+    }
     case ADD_COLUMN: {
       const payload = action.payload;
       const id = uuid();
@@ -302,7 +314,7 @@ const makeReducer = (registry) => produce((state, action) => {
         id: id,
         name: payload.name,
         props: registry.getDefaultProps(payload.name),
-        hasChildren: false
+        children: [],
       };
       state.componentMap[id] = component;
       state.columnMap[payload.columnID].components.push(id);
@@ -331,6 +343,46 @@ const makeReducer = (registry) => produce((state, action) => {
       delete state.columnMap[payload.id];
       state.rowMap[payload.rowID].columns.splice(payload.index, 1);
       return;
+    }
+    case ADD_SUB_WIDGET: {
+      const payload = action.payload;
+      const id = payload.id || uuid();
+      const component = {
+        id: id,
+        name: payload.name,
+        props: registry.getDefaultProps(payload.name),
+      };
+      state.subComponentMap[id] = component;
+      state.componentMap[payload.componentID].children.push(id);
+      return;
+    }
+    case REORDER_SUB_WIDGET: {
+      const result = action.payload;
+      const id = result.source.droppableId;
+      state.componentMap[id].children = reorder(
+        state.componentMap[id].children,
+        result.source.index,
+        result.destination.index
+      );
+      return;
+    }
+    case CLONE_SUB_WIDGET: {
+      const payload = action.payload;
+      const clone = state.subComponentMap[payload.id];
+      const id = uuid();
+      const component = {
+        ...clone,
+        id: id
+      };
+      state.subComponentMap[id] = component;
+      state.componentMap[payload.componentID].children.splice(payload.index, 0, id);
+      return 
+    }
+    case DELETE_SUB_WIDGET: {
+      const payload = action.payload;
+      delete state.subComponentMap[payload.id];
+      state.componentMap[payload.componentID].children.splice(payload.index, 1)
+      return
     }
     case CLONE_COLUMN: {
       const payload = action.payload;

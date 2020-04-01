@@ -63,7 +63,7 @@ const Modal = ({ isOpen, close, onSelectComponent }) => {
       <h2>Select a component to insert</h2>
       <div css={{ display: "flex", flexWrap: "wrap", margin: "0 -12px" }}>
         {registry.getComponents().map(component => {
-          return (
+          return component.hidden ? null : (
             <Tile
               key={component.name}
               icon={component.icon}

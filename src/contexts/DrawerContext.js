@@ -8,7 +8,8 @@ const DrawerProvider = props => {
     open: false,
     row: null,
     column: null,
-    component: null
+    component: null,
+    subComponent: null,
   });
   return (
     <DrawerStateContext.Provider value={drawerState}>

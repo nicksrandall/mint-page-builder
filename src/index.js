@@ -47,31 +47,9 @@ if (process.env.NODE_ENV === "production") {
   console.log("bootstrap from production");
   init(bootstrap);
 } else {
-  // fake sdk for local devlopement
-  console.log("bootstrap with sample data");
-  const noop = () => {};
-  class Location {
-    constructor(loc) {
-      this.loc = loc;
-    }
-    is(value) {
-      return this.loc === value;
-    }
-  }
-  const location = new Location(locations.LOCATION_DIALOG);
-  bootstrap({
-    app: {
-      onConfigure: noop,
-      setReady: noop,
-      getParameters: () =>
-        Promise.resolve({
-          components: []
-        })
-    },
-    location,
-    close: noop,
-    notifier: { error: noop },
-    window: { updateHeight: noop, startAutoResizer: noop },
-    parameters: { invocation: { initialValue: [] }, installation: { components: [] } }
+  import("./utils/shim").then(({ shim }) => {
+    console.log("bootstrap with sample data");
+    // fake sdk for local devlopement
+    bootstrap(shim);
   });
 }

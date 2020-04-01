@@ -10,7 +10,15 @@ export const format = state => {
           id: component.id,
           name: component.name,
           props: component.props,
-          children: component.hasChildren ? [] : []
+          children: (component.children || []).map(id => {
+            const sub = state.subComponentMap[id];
+            return {
+              id: id,
+              name: sub.name,
+              props: sub.props,
+              children: []
+            };
+          })
         };
       });
       return {
@@ -34,7 +42,8 @@ export const unformat = (layout = []) => {
   const state = {
     rowMap: {},
     columnMap: {},
-    componentMap: {}
+    componentMap: {},
+    subComponentMap: {}
   };
   state.ordered = layout.map(row => {
     state.rowMap[row.id] = {
@@ -49,7 +58,14 @@ export const unformat = (layout = []) => {
               id: component.id,
               name: component.name,
               props: component.props,
-              hasChildren: false
+              children: (component.children || []).map(sub => {
+                state.subComponentMap[sub.id] = {
+                  id: sub.id,
+                  name: sub.name,
+                  props: sub.props
+                };
+                return sub.id;
+              })
             };
             return component.id;
           })
