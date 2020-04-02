@@ -107,6 +107,7 @@ const Column = React.memo(({ rowID, column, index }) => {
                           label={`Content spans ${column.props.mobileSpan} columns on mobile`}
                         />
                         {column.props.mobileSpan}
+                        {column.props.mobileOffset > 0 ? `-${column.props.mobileOffset}` : null}
                       </Sizing>
                       <Sizing>
                         <Icon
@@ -115,6 +116,7 @@ const Column = React.memo(({ rowID, column, index }) => {
                           label={`Content spans ${column.props.tabletSpan} columns on tablet`}
                         />
                         {column.props.tabletSpan}
+                        {column.props.tabletOffset > 0 ? `-${column.props.tabletOffset}` : null}
                       </Sizing>
                       <Sizing>
                         <Icon
@@ -123,6 +125,7 @@ const Column = React.memo(({ rowID, column, index }) => {
                           label={`Content spans ${column.props.desktopSpan} columns on desktop`}
                         />
                         {column.props.desktopSpan}
+                        {column.props.desktopOffset > 0 ? `-${column.props.desktopOffset}` : null}
                       </Sizing>
                     </div>
                   </div>

@@ -10,6 +10,7 @@ const columnSpec = {
       name: "mobileSpan",
       displayName: "Mobile Span",
       type: "select",
+      cast: "number",
       options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
@@ -21,6 +22,7 @@ const columnSpec = {
       name: "mobileOffset",
       displayName: "Mobile Offset",
       type: "select",
+      cast: "number",
       options: [
         { label: "0 Column", value: 0 },
         { label: "1 Column", value: 1 },
@@ -32,6 +34,7 @@ const columnSpec = {
       name: "tabletSpan",
       displayName: "Tablet Span",
       type: "select",
+      cast: "number",
       options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
@@ -47,6 +50,7 @@ const columnSpec = {
       name: "tabletOffset",
       displayName: "Tablet Offset",
       type: "select",
+      cast: "number",
       options: [
         { label: "0 Column", value: 0 },
         { label: "1 Column", value: 1 },
@@ -62,6 +66,7 @@ const columnSpec = {
       name: "desktopSpan",
       displayName: "Desktop Span",
       type: "select",
+      cast: "number",
       options: [
         { label: "1 Column", value: 1 },
         { label: "2 Column", value: 2 },
@@ -81,6 +86,7 @@ const columnSpec = {
       name: "desktopOffset",
       displayName: "Desktop Offset",
       type: "select",
+      cast: "number",
       options: [
         { label: "0 Column", value: 0 },
         { label: "1 Column", value: 1 },

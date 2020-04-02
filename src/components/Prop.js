@@ -14,6 +14,20 @@ import { UPDATE_PROP } from "../hooks/useDragState";
 import WYSIWYG from "./Wysiwyg";
 import { useSDK } from "../contexts/ContentfulSDK";
 
+const cast = (value, type = "any") => {
+  switch (type) {
+    case "number":
+      return Number(value);
+    case "boolean":
+      return Boolean(value);
+    case "text":
+      return String(value);
+    case "any":
+    default:
+      return value;
+  }
+};
+
 const resolveValue = (values, currentLocale, sdk) => {
   if (!values) {
     return null;
@@ -186,7 +200,7 @@ const Typography = ({ value = {}, onChange }) => {
 
 const Entry = ({ value, contentTypes, onChange }) => {
   const sdk = useSDK();
-  console.log('sdk', sdk);
+  console.log("sdk", sdk);
   const currentLocale = sdk.parameters.invocation.locale;
   return (
     <>
@@ -360,7 +374,7 @@ export const PropView = React.memo(props => {
                   id: uuid,
                   mapKey: mapKey,
                   name: definition.name,
-                  value: e.target.value
+                  value: cast(e.target.value, definition.cast)
                 }
               })
             }

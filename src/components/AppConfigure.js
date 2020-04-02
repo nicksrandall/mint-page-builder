@@ -29,6 +29,7 @@ const schema = array().of(
             "typography"
           ])
           .required(),
+        cast: string().oneOf(["boolean", "text", "number", "any"]).default("any"),
         displayName: string().required(),
         displayType: string()
           .oneOf(["boolean", "text", "json", "image", "color"])
