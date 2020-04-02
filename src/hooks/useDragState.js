@@ -171,6 +171,9 @@ const makeReducer = (registry) => produce((state, action) => {
           mobileSpan: 4,
           tabletSpan: 8,
           desktopSpan: 12,
+          mobileOffset: 0,
+          tabletOffset: 0,
+          desktopOffset: 0,
           padding: { px: 12, py: 12 }
         }
       };
@@ -301,6 +304,9 @@ const makeReducer = (registry) => produce((state, action) => {
           mobileSpan: 4,
           tabletSpan: 8,
           desktopSpan: 12,
+          mobileOffset: 0,
+          tabletOffset: 0,
+          desktopOffset: 0,
           padding: { px: 12, py: 12 }
         }
       };
