@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 import Icon from "./Icon";
 import { useDrawerState } from "../contexts/DrawerContext";
 import { useRegistry } from "../contexts/RegistryContext";
+import { useDragState } from "../contexts/DragContext";
 
 const HeaderControl = styled.button({
   color: "inherit",
@@ -208,7 +209,37 @@ export const WidgetView = ({
           <p>This widget has not configurable props</p>
         )}
       </div>
+      {Array.isArray(widget.children) && widget.children.length ? (
+        <div
+          css={{
+            padding: "4px"
+          }}
+        >
+          <ChildrenList childs={widget.children} />
+        </div>
+      ) : null}
     </div>
+  );
+};
+
+const ChildrenList = ({ childs }) => {
+  const state = useDragState();
+  return (
+    <>
+      <div css={{ fontWeight: 700, paddingRight: "8px", fontSize: "12px" }}>
+        Children:
+      </div>
+      <ul css={{margin: 0}}>
+      {childs.map(id => {
+        const comp = state.subComponentMap[id];
+        return (
+          <li key={id} css={{ fontSize: "12px" }}>
+            {comp.name}
+          </li>
+        );
+      })}
+      </ul>
+    </>
   );
 };
 
@@ -234,4 +265,3 @@ export const Widget = ({ widget, index, onSettings, onDelete, onClone }) => {
     </Draggable>
   );
 };
-

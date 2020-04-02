@@ -6,7 +6,8 @@ import Prop from "./Prop";
 const columnSpec = {
   name: "Column",
   props: [
-    { name: "mobileSpan",
+    {
+      name: "mobileSpan",
       displayName: "Mobile Span",
       type: "select",
       options: [
@@ -14,6 +15,17 @@ const columnSpec = {
         { label: "2 Column", value: 2 },
         { label: "3 Column", value: 3 },
         { label: "4 Column", value: 4 }
+      ]
+    },
+    {
+      name: "mobileOffset",
+      displayName: "Mobile Offset",
+      type: "select",
+      options: [
+        { label: "0 Column", value: 0 },
+        { label: "1 Column", value: 1 },
+        { label: "2 Column", value: 2 },
+        { label: "3 Column", value: 3 }
       ]
     },
     {
@@ -29,6 +41,21 @@ const columnSpec = {
         { label: "6 Column", value: 6 },
         { label: "7 Column", value: 7 },
         { label: "8 Column", value: 8 }
+      ]
+    },
+    {
+      name: "tabletOffset",
+      displayName: "Tablet Offset",
+      type: "select",
+      options: [
+        { label: "0 Column", value: 0 },
+        { label: "1 Column", value: 1 },
+        { label: "2 Column", value: 2 },
+        { label: "3 Column", value: 3 },
+        { label: "4 Column", value: 4 },
+        { label: "5 Column", value: 5 },
+        { label: "6 Column", value: 6 },
+        { label: "7 Column", value: 7 }
       ]
     },
     {
@@ -48,6 +75,25 @@ const columnSpec = {
         { label: "10 Column", value: 10 },
         { label: "11 Column", value: 11 },
         { label: "12 Column", value: 12 }
+      ]
+    },
+    {
+      name: "desktopOffset",
+      displayName: "Desktop Offset",
+      type: "select",
+      options: [
+        { label: "0 Column", value: 0 },
+        { label: "1 Column", value: 1 },
+        { label: "2 Column", value: 2 },
+        { label: "3 Column", value: 3 },
+        { label: "4 Column", value: 4 },
+        { label: "5 Column", value: 5 },
+        { label: "6 Column", value: 6 },
+        { label: "7 Column", value: 7 },
+        { label: "8 Column", value: 8 },
+        { label: "9 Column", value: 9 },
+        { label: "10 Column", value: 10 },
+        { label: "11 Column", value: 11 }
       ]
     },
     {

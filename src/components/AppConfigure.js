@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from "react";
 import { Note } from "@contentful/forma-36-react-components";
 
-import { array, string, object, mixed } from "yup"; // for only what you need
+import { array, string, object, mixed, boolean } from "yup"; // for only what you need
 
 const Editor = React.lazy(() => import("./JSONEditor"));
 
@@ -9,6 +9,7 @@ const schema = array().of(
   object().shape({
     name: string().required(),
     icon: string().required(),
+    hidden: boolean().default(false),
     props: array().of(
       object().shape({
         name: string().required(),
@@ -16,6 +17,7 @@ const schema = array().of(
           .oneOf([
             "text",
             "url",
+            "number",
             "color",
             "select",
             "media",

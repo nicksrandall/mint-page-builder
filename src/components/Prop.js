@@ -302,6 +302,30 @@ export const PropView = React.memo(props => {
           />
         </PropContainer>
       );
+    case "number":
+      return (
+        <PropContainer>
+          <Label>{definition.displayName}</Label>
+          <Input
+            type="number"
+            defaultValue={value}
+            placeholder={definition.placeholder}
+            onChange={debounce(
+              e =>
+                dispatch({
+                  type: action,
+                  payload: {
+                    id: uuid,
+                    mapKey: mapKey,
+                    name: definition.name,
+                    value: e.target.value
+                  }
+                }),
+              { wait: 100 }
+            )}
+          />
+        </PropContainer>
+      );
     case "color":
       return (
         <PropContainer>
