@@ -2,7 +2,7 @@ import React from "react";
 
 import { Widget } from "./Widget";
 import { useDragUpdater } from "../contexts/DragContext";
-import { DELETE_WIDGET, CLONE_WIDGET } from "../hooks/useDragState";
+import { DELETE_WIDGET, CLONE_WIDGET } from "../utils/constants";
 import { useDrawerUpdater } from "../contexts/DrawerContext";
 
 const Comp = React.memo(({ rowID, columnID, widget, index }) => {

@@ -11,7 +11,7 @@ import {
   ADD_SUB_WIDGET,
   DELETE_SUB_WIDGET,
   CLONE_SUB_WIDGET
-} from "../hooks/useDragState";
+} from "../utils/constants";
 import Icon from "./Icon";
 import { useRegistry } from "../contexts/RegistryContext";
 import { SectionHeading } from "./DrawerUtils";

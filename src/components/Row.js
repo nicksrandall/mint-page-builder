@@ -3,7 +3,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 
 import Icon from "./Icon";
-import { CLONE_ROW, ADD_COLUMN, DELETE_ROW } from "../hooks/useDragState";
+import { CLONE_ROW, ADD_COLUMN, DELETE_ROW } from "../utils/constants";
 import Column from "./Column";
 import {useDragState, useDragUpdater} from "../contexts/DragContext";
 import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";

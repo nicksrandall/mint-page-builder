@@ -9,7 +9,7 @@ import {
   REORDER_WIDGET,
   REORDER_COLUMN,
   REORDER_SUB_WIDGET
-} from "./hooks/useDragState";
+} from "./utils/constants";
 import Sidebar from "./components/Sidebar";
 import Row from "./components/Row";
 import {

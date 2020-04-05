@@ -3,7 +3,7 @@ import debounce from "debounce-fn";
 import { Button } from "@contentful/forma-36-react-components";
 
 import Editor from "./JSONEditor";
-import { FORCE_UPDATE } from "../hooks/useDragState";
+import { FORCE_UPDATE } from "../utils/constants";
 import { useDragState, useDragUpdater } from "../contexts/DragContext";
 import { format, unformat } from "../utils/formatJSON";
 import schema from "../utils/layoutSchema";

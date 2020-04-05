@@ -5,7 +5,7 @@ import uuid from "@lukeed/uuid";
 
 import ComponentModal from "./ComponentModal";
 import Icon from "./Icon";
-import { ADD_WIDGET, DELETE_COLUMN, CLONE_COLUMN } from "../hooks/useDragState";
+import { ADD_WIDGET, DELETE_COLUMN, CLONE_COLUMN } from "../utils/constants";
 import Widget from "./Component";
 import {useDragState, useDragUpdater} from "../contexts/DragContext";
 import {useDrawerState, useDrawerUpdater} from "../contexts/DrawerContext";

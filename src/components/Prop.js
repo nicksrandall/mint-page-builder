@@ -9,7 +9,7 @@ import { Sx } from "@theme-ui/editor";
 import { useThemeUI } from "theme-ui";
 
 import { useDragState, useDragUpdater } from "../contexts/DragContext";
-import { UPDATE_PROP } from "../hooks/useDragState";
+import { UPDATE_PROP } from "../utils/constants";
 // import WYSIWYG from './Slate';
 import WYSIWYG from "./Wysiwyg";
 import { useSDK } from "../contexts/ContentfulSDK";
