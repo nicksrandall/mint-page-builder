@@ -6,53 +6,59 @@ import { array, string, object, mixed, boolean } from "yup"; // for only what yo
 const Editor = React.lazy(() => import("./JSONEditor"));
 
 const schema = array().of(
-  object().shape({
-    name: string().required(),
-    icon: string().required(),
-    hidden: boolean().default(false),
-    props: array().of(
-      object().shape({
-        name: string().required(),
-        type: string()
-          .oneOf([
-            "text",
-            "url",
-            "number",
-            "color",
-            "select",
-            "media",
-            "entry",
-            "range",
-            "box-model",
-            "checkbox",
-            "WYSIWYG",
-            "typography"
-          ])
-          .required(),
-        cast: string().oneOf(["boolean", "text", "number", "any"]).default("any"),
-        displayName: string().required(),
-        displayType: string()
-          .oneOf(["boolean", "text", "json", "image", "color"])
-          .required(),
-        defaultValue: mixed()
-          .nullable(),
-        options: mixed().nullable()
-      })
-    )
-  }).noUnknown()
+  object()
+    .shape({
+      name: string().required(),
+      icon: string().required(),
+      hidden: boolean().default(false),
+      props: array().of(
+        object().shape({
+          name: string().required(),
+          type: string()
+            .oneOf([
+              "text",
+              "url",
+              "number",
+              "color",
+              "select",
+              "media",
+              "entry",
+              "range",
+              "box-model",
+              "checkbox",
+              "WYSIWYG",
+              "typography"
+            ])
+            .required(),
+          cast: string()
+            .oneOf(["boolean", "text", "number", "any"])
+            .default("any"),
+          displayName: string().required(),
+          displayType: string()
+            .oneOf(["boolean", "text", "json", "image", "color"])
+            .required(),
+          defaultValue: mixed().nullable(),
+          options: mixed().nullable()
+        })
+      )
+    })
+    .noUnknown()
 );
 
 class AppConfigure extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: [] };
+    this.state = { value: "[]", ready: false };
     this.props.sdk.app.onConfigure(() => this.onConfigure());
   }
   componentDidMount() {
     // Get current parameters of the app.
     this.props.sdk.app.getParameters().then(params => {
       this.setState(
-        { value: JSON.stringify(params.components || [], null, "  ") },
+        {
+          value: JSON.stringify(params.components || [], null, "  "),
+          ready: true
+        },
         () => {
           this.props.sdk.app.setReady();
         }
@@ -63,7 +69,6 @@ class AppConfigure extends Component {
     // TODO: do more validation
     // like on the whole schema
     try {
-      console.log("value", this.state.value);
       let components = window.jsonlint.parse(this.state.value);
       try {
         components = schema.validateSync(components);
@@ -120,10 +125,12 @@ class AppConfigure extends Component {
           }}
         >
           <Suspense fallback={<div>loading...</div>}>
-            <Editor
-              value={this.state.value}
-              onBeforeChange={this.handleChange}
-            />
+            {this.state.ready ? (
+              <Editor
+                value={this.state.value}
+                onBeforeChange={this.handleChange}
+              />
+            ) : null}
           </Suspense>
         </div>
       </div>
