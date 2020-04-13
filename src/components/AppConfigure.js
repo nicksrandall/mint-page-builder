@@ -53,17 +53,24 @@ class AppConfigure extends Component {
   }
   componentDidMount() {
     // Get current parameters of the app.
-    this.props.sdk.app.getParameters().then(params => {
-      this.setState(
-        {
-          value: JSON.stringify(params.components || [], null, "  "),
-          ready: true
-        },
-        () => {
-          this.props.sdk.app.setReady();
-        }
-      );
-    });
+    this.props.sdk.app
+      .getParameters()
+      .then(params => {
+        console.log("params", params);
+        this.setState(
+          {
+            value: JSON.stringify(params.components || [], null, "  "),
+            ready: true
+          },
+          () => {
+            this.props.sdk.app.setReady();
+          }
+        );
+      })
+      .catch(err => {
+        console.error("err", err);
+        return this.props.sdk.app.setReady();
+      });
   }
   onConfigure() {
     // TODO: do more validation
