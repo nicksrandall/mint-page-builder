@@ -12,7 +12,7 @@ class Location {
   }
 }
 
-export const location = new Location(locations.LOCATION_DIALOG);
+export const location = new Location(locations.LOCATION_APP_CONFIG);
 
 const components = [
   {
