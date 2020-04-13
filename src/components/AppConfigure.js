@@ -56,10 +56,9 @@ class AppConfigure extends Component {
     this.props.sdk.app
       .getParameters()
       .then(params => {
-        console.log("params", params);
         this.setState(
           {
-            value: JSON.stringify(params.components || [], null, "  "),
+            value: JSON.stringify(params && params.components || [], null, "  "),
             ready: true
           },
           () => {
